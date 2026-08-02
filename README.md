@@ -1,4 +1,4 @@
-# FixForge
+# Advanced IT Troubleshooting Utility (Batch Scripting)
 
 > A two-script enterprise maintenance toolkit for Windows and macOS — built and deployed for L1/L2 IT support operations at Femmella Fashions India Limited.
 
