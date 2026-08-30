@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FixForge — Vikas Singh</title>
+  <meta name="description" content="FixForge: Enterprise endpoint maintenance toolkit for Windows and macOS. Built by Vikas Singh, IT Systems Specialist." />
+  <meta property="og:title" content="FixForge — Enterprise IT Automation by Vikas Singh" />
+  <meta property="og:description" content="A two-script enterprise maintenance toolkit deployed at Femmella Fashions India Ltd." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300..700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+
+  <style>
+    /* === DESIGN TOKENS === */
+    :root, [data-theme="light"] {
+      --color-bg: #f7f6f2;
+      --color-surface: #f9f8f5;
+      --color-surface-2: #fbfbf9;
+      --color-surface-offset: #f3f0ec;
+      --color-divider: #dcd9d5;
+      --color-border: #d4d1ca;
+      --color-text: #28251d;
+      --color-text-muted: #7a7974;
+      --color-text-faint: #bab9b4;
+      --color-primary: #01696f;
+      --color-primary-hover: #0c4e54;
+      --color-primary-highlight: #cedcd8;
+      --shadow-sm: 0 1px 2px oklch(0.2 0.01 80 / 0.06);
+      --shadow-md: 0 4px 12px oklch(0.2 0.01 80 / 0.08);
+      --shadow-lg: 0 12px 32px oklch(0.2 0.01 80 / 0.12);
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-full: 9999px;
+      --font-body: 'Inter', 'Helvetica Neue', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+      --text-hero: clamp(2.5rem, 0.5rem + 6vw, 5.5rem);
+      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+      --space-4: 1rem; --space-6: 1.5rem; --space-8: 2rem;
+      --space-10: 2.5rem; --space-12: 3rem; --space-16: 4rem;
+      --space-20: 5rem; --space-24: 6rem;
+      --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --content-default: 960px;
+      --content-wide: 1200px;
+    }
+
+    [data-theme="dark"] {
+      --color-bg: #111110;
+      --color-surface: #171614;
+      --color-surface-2: #1e1d1b;
+      --color-surface-offset: #222120;
+      --color-divider: #2a2927;
+      --color-border: #333230;
+      --color-text: #e8e6e3;
+      --color-text-muted: #8a8884;
+      --color-text-faint: #4e4d4b;
+      --color-primary: #4f98a3;
+      --color-primary-hover: #227f8b;
+      --color-primary-highlight: #1e3535;
+      --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.2);
+      --shadow-md: 0 4px 12px oklch(0 0 0 / 0.3);
+      --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.4);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-font-smoothing: antialiased; }
+    body {
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--color-text);
+      background: var(--color-bg);
+      transition: background var(--transition), color var(--transition);
+    }
+    img, svg { display: block; max-width: 100%; }
+    p { text-wrap: pretty; max-width: 70ch; }
+    h1, h2, h3 { text-wrap: balance; line-height: 1.15; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+    ::selection { background: oklch(from var(--color-primary) l c h / 0.25); }
+
+    /* === SCROLLBAR === */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--color-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: var(--radius-full); }
+
+    /* === NAV === */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-4) var(--space-8);
+      background: oklch(from var(--color-bg) l c h / 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-divider);
+      transition: background var(--transition);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-mono); font-weight: 600;
+      font-size: var(--text-sm); letter-spacing: -0.02em;
+    }
+    .nav-logo svg { color: var(--color-primary); }
+    .nav-links {
+      display: flex; align-items: center; gap: var(--space-6);
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: var(--text-sm); color: var(--color-text-muted);
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--color-text); }
+    .theme-toggle {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: var(--radius-md);
+      color: var(--color-text-muted);
+      transition: color var(--transition), background var(--transition);
+    }
+    .theme-toggle:hover { background: var(--color-surface-offset); color: var(--color-text); }
+
+    /* === HERO === */
+    .hero {
+      min-height: 100svh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 var(--space-8) var(--space-16);
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 60% 40%, oklch(from var(--color-primary) l c h / 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 10% 80%, oklch(from var(--color-primary) l c h / 0.05) 0%, transparent 60%);
+    }
+    .hero-grid-pattern {
+      position: absolute; inset: 0; z-index: 0; opacity: 0.03;
+      background-image:
+        linear-gradient(var(--color-text) 1px, transparent 1px),
+        linear-gradient(90deg, var(--color-text) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: var(--content-wide); }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-mono); font-size: var(--text-xs);
+      color: var(--color-primary); letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: var(--space-6);
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 24px; height: 1px; background: var(--color-primary);
+    }
+    .hero-title {
+      font-size: var(--text-hero);
+      font-weight: 700; letter-spacing: -0.03em;
+      line-height: 1.0;
+      margin-bottom: var(--space-6);
+    }
+    .hero-title .accent { color: var(--color-primary); }
+    .hero-desc {
+      font-size: var(--text-lg); color: var(--color-text-muted);
+      max-width: 55ch; line-height: 1.6;
+      margin-bottom: var(--space-10);
+    }
+    .hero-actions { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      background: var(--color-primary); color: #fff;
+      border-radius: var(--radius-md); font-size: var(--text-sm);
+      font-weight: 600; transition: background var(--transition), transform var(--transition);
+    }
+    .btn-primary:hover { background: var(--color-primary-hover); transform: translateY(-1px); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      border: 1px solid var(--color-border); border-radius: var(--radius-md);
+      font-size: var(--text-sm); font-weight: 500;
+      color: var(--color-text-muted);
+      transition: color var(--transition), border-color var(--transition), background var(--transition);
+    }
+    .btn-ghost:hover { color: var(--color-text); border-color: var(--color-text); background: var(--color-surface); }
+    .hero-stats {
+      position: absolute; bottom: var(--space-16); right: var(--space-8);
+      display: flex; flex-direction: column; gap: var(--space-4);
+      z-index: 1;
+    }
+    .stat-item {
+      text-align: right;
+    }
+    .stat-number {
+      font-family: var(--font-mono); font-size: var(--text-xl);
+      font-weight: 600; color: var(--color-text); line-height: 1;
+    }
+    .stat-label {
+      font-size: var(--text-xs); color: var(--color-text-faint);
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+
+    /* === SECTION COMMON === */
+    .section {
+      padding: clamp(var(--space-16), 8vw, var(--space-24));
+      max-width: var(--content-wide);
+      margin-inline: auto;
+    }
+    .section-label {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-mono); font-size: var(--text-xs);
+      color: var(--color-primary); letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: var(--space-4);
+    }
+    .section-title {
+      font-size: var(--text-xl); font-weight: 700;
+      letter-spacing: -0.02em; margin-bottom: var(--space-8);
+    }
+    .divider {
+      border: none; border-top: 1px solid var(--color-divider);
+      margin: 0;
+    }
+
+    /* === PROBLEM/SOLUTION SPLIT === */
+    .split-section {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: var(--space-16); align-items: start;
+    }
+    .split-label {
+      font-family: var(--font-mono); font-size: var(--text-xs);
+      color: var(--color-text-faint); letter-spacing: 0.08em;
+      text-transform: uppercase; margin-bottom: var(--space-3);
+    }
+    .split-heading {
+      font-size: var(--text-lg); font-weight: 600;
+      margin-bottom: var(--space-4);
+    }
+    .split-body {
+      font-size: var(--text-base); color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+    .pain-point {
+      display: flex; align-items: flex-start; gap: var(--space-3);
+      padding: var(--space-4);
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-3);
+    }
+    .pain-point-icon { color: var(--color-text-faint); flex-shrink: 0; margin-top: 2px; }
+    .pain-point-text { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.6; }
+
+    /* === PLATFORMS === */
+    .platforms-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+    }
+    .platform-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      transition: box-shadow var(--transition), border-color var(--transition);
+    }
+    .platform-card:hover { box-shadow: var(--shadow-md); border-color: var(--color-border); }
+    .platform-badge {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-mono); font-size: var(--text-xs);
+      padding: var(--space-1) var(--space-3);
+      background: var(--color-primary-highlight);
+      color: var(--color-primary);
+      border-radius: var(--radius-full); margin-bottom: var(--space-4);
+    }
+    .platform-name { font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-2); }
+    .platform-version { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-faint); margin-bottom: var(--space-6); }
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-2); }
+    .feature-list li {
+      display: flex; align-items: flex-start; gap: var(--space-2);
+      font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.5;
+    }
+    .feature-list li::before {
+      content: '';
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--color-primary); flex-shrink: 0; margin-top: 7px;
+    }
+
+    /* === TERMINAL DEMO === */
+    .terminal-wrapper {
+      background: #0d0d0d;
+      border: 1px solid #2a2a2a;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .terminal-header {
+      display: flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      background: #161616; border-bottom: 1px solid #222;
+    }
+    .terminal-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+    }
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green { background: #28c840; }
+    .terminal-title {
+      font-family: var(--font-mono); font-size: var(--text-xs);
+      color: #666; margin-left: var(--space-2);
+    }
+    .terminal-body {
+      padding: var(--space-6);
+      font-family: var(--font-mono); font-size: 0.8rem;
+      line-height: 1.8; color: #c0c0c0;
+    }
+    .t-prompt { color: #4f98a3; }
+    .t-cmd { color: #e8e6e3; }
+    .t-success { color: #28c840; }
+    .t-fail { color: #ff5f57; }
+    .t-comment { color: #555; }
+    .t-bold { color: #fff; font-weight: 600; }
+
+    /* === CAPABILITIES GRID === */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+    }
+    .cap-card {
+      padding: var(--space-6);
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-lg);
+    }
+    .cap-icon {
+      width: 32px; height: 32px;
+      color: var(--color-primary);
+      margin-bottom: var(--space-4);
+    }
+    .cap-title { font-size: var(--text-sm); font-weight: 600; margin-bottom: var(--space-2); }
+    .cap-desc { font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1.6; }
+
+    /* === IMPACT === */
+    .impact-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      padding: var(--space-12) 0;
+      border-top: 1px solid var(--color-divider);
+      border-bottom: 1px solid var(--color-divider);
+    }
+    .impact-stat { text-align: center; }
+    .impact-number {
+      font-family: var(--font-mono); font-size: var(--text-2xl);
+      font-weight: 700; color: var(--color-text);
+      letter-spacing: -0.03em;
+    }
+    .impact-unit { color: var(--color-primary); }
+    .impact-label {
+      font-size: var(--text-xs); color: var(--color-text-faint);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-top: var(--space-1);
+    }
+
+    /* === ROADMAP === */
+    .roadmap-list { display: flex; flex-direction: column; gap: var(--space-3); }
+    .roadmap-item {
+      display: flex; align-items: center; gap: var(--space-4);
+      padding: var(--space-4) var(--space-6);
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-lg);
+    }
+    .roadmap-status {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .roadmap-status.pending { background: var(--color-text-faint); }
+    .roadmap-text { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+    /* === AUTHOR === */
+    .author-section {
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-divider);
+      border-bottom: 1px solid var(--color-divider);
+    }
+    .author-inner {
+      max-width: var(--content-default);
+      margin-inline: auto;
+      padding: var(--space-12) var(--space-8);
+      display: flex; align-items: center; gap: var(--space-8);
+    }
+    .author-avatar {
+      width: 64px; height: 64px; border-radius: var(--radius-full);
+      background: var(--color-primary-highlight);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono); font-weight: 700;
+      font-size: var(--text-lg); color: var(--color-primary);
+      flex-shrink: 0;
+    }
+    .author-name { font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-1); }
+    .author-title { font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-4); }
+    .author-links { display: flex; gap: var(--space-4); }
+    .author-link {
+      display: inline-flex; align-items: center; gap: var(--space-1);
+      font-size: var(--text-xs); color: var(--color-primary);
+      font-family: var(--font-mono);
+      transition: color var(--transition);
+    }
+    .author-link:hover { color: var(--color-primary-hover); }
+
+    /* === FOOTER === */
+    footer {
+      padding: var(--space-8);
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: var(--content-wide); margin-inline: auto;
+    }
+    .footer-text { font-size: var(--text-xs); color: var(--color-text-faint); font-family: var(--font-mono); }
+    .footer-badge {
+      font-size: var(--text-xs); color: var(--color-text-faint);
+      display: flex; align-items: center; gap: var(--space-2);
+    }
+    .mit-badge {
+      padding: 2px var(--space-2);
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      nav { padding: var(--space-4); }
+      .nav-links { display: none; }
+      .hero { padding: 0 var(--space-4) var(--space-12); }
+      .hero-stats { display: none; }
+      .section { padding: var(--space-12) var(--space-4); }
+      .split-section { grid-template-columns: 1fr; gap: var(--space-8); }
+      .platforms-grid { grid-template-columns: 1fr; }
+      .cap-grid { grid-template-columns: 1fr 1fr; }
+      .impact-row { grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+      .author-inner { flex-direction: column; text-align: center; gap: var(--space-6); }
+      .author-links { justify-content: center; }
+      footer { flex-direction: column; gap: var(--space-4); text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .cap-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-label="FixForge logo">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </svg>
+    FixForge
+  </div>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#platforms">Platforms</a></li>
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+  </ul>
+  <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Enterprise Endpoint Automation</div>
+    <h1 class="hero-title">Fix<span class="accent">Forge</span></h1>
+    <p class="hero-desc">
+      A two-script enterprise maintenance toolkit for Windows &amp; macOS — built and deployed for L1/L2 IT support operations at Femmella Fashions India Limited.
+    </p>
+    <div class="hero-actions">
+      <a href="https://github.com/Vikas3333-singh/README.md" target="_blank" rel="noopener noreferrer" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.23 1.84 1.23 1.07 1.84 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.25 2.87.12 3.17.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        View on GitHub
+      </a>
+      <a href="#impact" class="btn-ghost">
+        See Impact
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-number">2</div>
+      <div class="stat-label">Platforms</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">14+</div>
+      <div class="stat-label">Automated Tasks</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">20+</div>
+      <div class="stat-label">Services Managed</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROBLEM / SOLUTION -->
+<section class="section" id="problem">
+  <div class="section-label">01 — Context</div>
+  <div class="split-section">
+    <div>
+      <div class="split-label">The Problem</div>
+      <h2 class="split-heading">Manual maintenance — every time, every endpoint</h2>
+      <p class="split-body" style="margin-bottom: var(--space-6);">
+        L1/L2 support engineers at Femmella Fashions were executing the same maintenance tasks manually on each endpoint — no consistency, no speed, and zero ability to automate or scale.
+      </p>
+      <div class="pain-point">
+        <div class="pain-point-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="pain-point-text">Temp cleanup, disk repair, driver updates, Office repair — done one by one manually</div>
+      </div>
+      <div class="pain-point">
+        <div class="pain-point-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="pain-point-text">No standardisation across Windows and macOS endpoints in the fleet</div>
+      </div>
+      <div class="pain-point">
+        <div class="pain-point-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="pain-point-text">No CLI/silent deployment support for Intune or SCCM rollout</div>
+      </div>
+    </div>
+    <div>
+      <div class="split-label">The Solution</div>
+      <h2 class="split-heading">Full maintenance lifecycle — one command</h2>
+      <p class="split-body">
+        FixForge standardises endpoint maintenance across both platforms. Engineers run one command instead of a manual checklist. Silent CLI mode enables zero-interaction deployment via Intune/SCCM.
+      </p>
+      <div style="margin-top: var(--space-6);">
+        <div class="terminal-wrapper">
+          <div class="terminal-header">
+            <div class="terminal-dot red"></div>
+            <div class="terminal-dot yellow"></div>
+            <div class="terminal-dot green"></div>
+            <div class="terminal-title">mac_maintenance.sh — sudo</div>
+          </div>
+          <div class="terminal-body">
+            <div><span class="t-prompt">$</span> <span class="t-cmd">sudo ./maintenance.sh --full --auto</span></div>
+            <div><span class="t-comment">## Full Maintenance Summary</span></div>
+            <div><span class="t-success">✓</span> Homebrew Update &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-success">OK</span></div>
+            <div><span class="t-success">✓</span> Cache Cleanup &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-success">OK</span></div>
+            <div><span class="t-success">✓</span> Battery Health &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-success">OK</span></div>
+            <div><span class="t-success">✓</span> Verify Disk &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-success">OK</span></div>
+            <div><span class="t-fail">✗</span> Create Backup &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-fail">FAILED</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PLATFORMS -->
+<section class="section" id="platforms">
+  <div class="section-label">02 — Scripts</div>
+  <h2 class="section-title">Two platforms. One toolkit.</h2>
+  <div class="platforms-grid">
+
+    <div class="platform-card">
+      <div class="platform-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M0 0h11.377v11.372H0zm12.623 0H24v11.372H12.623zM0 12.623h11.377V24H0zm12.623 0H24V24H12.623z"/></svg>
+        Windows
+      </div>
+      <div class="platform-name">windows_maintenance_final.bat</div>
+      <div class="platform-version">Windows 10 / 11 · Run as Administrator</div>
+      <ul class="feature-list">
+        <li>Natural language issue routing — user types problem in plain English, script routes to the right menu automatically</li>
+        <li>15 CLI arguments for silent automated execution (temp, sfc, dism, drivers, office, diskcleanup…)</li>
+        <li>Disables 20+ non-essential Windows services for performance gains</li>
+        <li>Intune/SCCM-ready: silent mode with full CLI argument support</li>
+        <li>Optional <code style="font-family:var(--font-mono);font-size:0.75em;background:var(--color-surface-offset);padding:1px 4px;border-radius:3px;">maintenance_config.ini</code> for custom deployment settings</li>
+      </ul>
+    </div>
+
+    <div class="platform-card">
+      <div class="platform-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"/></svg>
+        macOS
+      </div>
+      <div class="platform-name">maintenance.sh</div>
+      <div class="platform-version">v2.1 · macOS Ventura+ · set -Eeuo pipefail</div>
+      <ul class="feature-list">
+        <li>Atomic process locking — prevents concurrent runs, stores PID for diagnostics</li>
+        <li><code style="font-family:var(--font-mono);font-size:0.75em;background:var(--color-surface-offset);padding:1px 4px;border-radius:3px;">--dry-run</code> mode previews every destructive action — zero changes made</li>
+        <li>Log rotation at 10MB, keeps last 5 rotated logs, writes to Console.app via logger</li>
+        <li>Disk space pre-check before backup; aborts if insufficient space detected</li>
+        <li>JSON system reports retained 90 days in /Library/Application Support/Femella/</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CAPABILITIES -->
+<section class="section" id="capabilities">
+  <div class="section-label">03 — Capabilities</div>
+  <h2 class="section-title">What FixForge automates</h2>
+  <div class="cap-grid">
+    <div class="cap-card">
+      <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+      <div class="cap-title">Performance Optimisation</div>
+      <div class="cap-desc">Temp cleanup, disk defrag, service disabling, app cache clearing (Slack, Chrome, Teams, Discord).</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+      <div class="cap-title">System Health Checks</div>
+      <div class="cap-desc">SFC, DISM, diskutil verifyVolume, memory pressure reporting, hardware diagnostics.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></div>
+      <div class="cap-title">Driver &amp; Software Updates</div>
+      <div class="cap-desc">Windows driver scan via pnputil, Homebrew update/upgrade/cleanup, Windows Update automation.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="cap-title">App Repair</div>
+      <div class="cap-desc">Microsoft Office repair, Microsoft Store reset, app cache clearing for productivity apps.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+      <div class="cap-title">Battery &amp; Power</div>
+      <div class="cap-desc">Battery health report with cycle count and wear level; High Performance power plan; macOS system_profiler parsing.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+      <div class="cap-title">Backup &amp; Reporting</div>
+      <div class="cap-desc">rsync backup with pre-flight disk space check; JSON system reports; rolling log rotation; SIEM-ready event logging.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- IMPACT -->
+<section class="section" id="impact">
+  <div class="section-label">04 — Impact</div>
+  <h2 class="section-title">Deployed. Standardised. Automated.</h2>
+  <div class="impact-row">
+    <div class="impact-stat">
+      <div class="impact-number">2<span class="impact-unit">×</span></div>
+      <div class="impact-label">Platforms Covered</div>
+    </div>
+    <div class="impact-stat">
+      <div class="impact-number">20<span class="impact-unit">+</span></div>
+      <div class="impact-label">Services Automated</div>
+    </div>
+    <div class="impact-stat">
+      <div class="impact-number">14</div>
+      <div class="impact-label">Maintenance Tasks</div>
+    </div>
+    <div class="impact-stat">
+      <div class="impact-number">0</div>
+      <div class="impact-label">User Interactions (Silent Mode)</div>
+    </div>
+  </div>
+  <div style="margin-top: var(--space-10); display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6);">
+    <div style="padding: var(--space-6); background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-lg);">
+      <div style="font-size: var(--text-xs); color: var(--color-text-faint); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--space-3); font-family: var(--font-mono);">Deployment</div>
+      <p style="font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.7;">
+        CLI argument support enables silent deployment via <strong style="color:var(--color-text)">Intune / SCCM</strong> with zero user interaction. Dry-run mode lets engineers preview impact before touching production endpoints.
+      </p>
+    </div>
+    <div style="padding: var(--space-6); background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-lg);">
+      <div style="font-size: var(--text-xs); color: var(--color-text-faint); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--space-3); font-family: var(--font-mono);">Standardisation</div>
+      <p style="font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.7;">
+        Standardised endpoint maintenance across the <strong style="color:var(--color-text)">Femmella Fashions India Ltd.</strong> fleet — L1/L2 engineers run full maintenance in one command instead of manual step-by-step.
+      </p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ROADMAP -->
+<section class="section" id="roadmap">
+  <div class="section-label">05 — Roadmap</div>
+  <h2 class="section-title">What's next</h2>
+  <div class="roadmap-list">
+    <div class="roadmap-item">
+      <div class="roadmap-status pending"></div>
+      <div class="roadmap-text">PowerShell rewrite of Windows script for richer output and remote execution</div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-status pending"></div>
+      <div class="roadmap-text">GUI wrapper for non-technical end users</div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-status pending"></div>
+      <div class="roadmap-text">Intune / SCCM deployment packaging (silent mode already supported)</div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-status pending"></div>
+      <div class="roadmap-text">Centralised logging to shared network path or SIEM</div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-status pending"></div>
+      <div class="roadmap-text">Linux support — maintenance_linux.sh</div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTHOR -->
+<div class="author-section">
+  <div class="author-inner">
+    <div class="author-avatar">VS</div>
+    <div>
+      <div class="author-name">Vikas Singh</div>
+      <div class="author-title">IT Systems Specialist · Endpoint Management · EUC · L1/L2 Support</div>
+      <div class="author-links">
+        <a href="https://github.com/Vikas3333-singh" target="_blank" rel="noopener noreferrer" class="author-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.23 1.84 1.23 1.07 1.84 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.25 2.87.12 3.17.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/vikas-singh" target="_blank" rel="noopener noreferrer" class="author-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-text">© 2025 Vikas Singh · FixForge</div>
+  <div class="footer-badge">
+    <span class="mit-badge">MIT</span>
+    Open Source
+  </div>
+</footer>
+
+<script>
+  // Theme toggle
+  (function(){
+    const t = document.querySelector('[data-theme-toggle]');
+    const r = document.documentElement;
+    let d = r.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    r.setAttribute('data-theme', d);
+    function updateIcon(){
+      if(!t) return;
+      t.innerHTML = d === 'dark'
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    }
+    updateIcon();
+    t && t.addEventListener('click', () => {
+      d = d === 'dark' ? 'light' : 'dark';
+      r.setAttribute('data-theme', d);
+      updateIcon();
+    });
+  })();
+
+  // Lucide icons
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.cap-card, .platform-card, .roadmap-item, .pain-point').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
