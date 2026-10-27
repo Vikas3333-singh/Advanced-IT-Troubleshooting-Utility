@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Executive Case Study: Enterprise Endpoint Automation — Vikas Singh</title>
-  <meta name="description" content="Case Study: Engineering an automated, dual-OS endpoint maintenance and troubleshooting utility for enterprise fleet operations. By Vikas Singh." />
+  <title>Case Study: Advanced IT Troubleshooting Utility — Vikas Singh</title>
+  <meta name="description" content="Case Study: Engineering a lightweight (<100 KB) self-service Windows Batch automation tool with 8 one-click fixes, adopted into the BCG custom Windows image and internal IT support suite. By Vikas Singh." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,7 +87,7 @@
       overflow-x: hidden;
     }
     
-    h1, h2, h3, h4 { line-height: 1.2; letter-spacing: -0.025em; font-weight: 700; color: var(--color-text); }
+    h1, h2, h3, h4 { line-height: 1.25; letter-spacing: -0.025em; font-weight: 700; color: var(--color-text); }
     a { color: inherit; text-decoration: none; }
     button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
 
@@ -96,7 +96,7 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
       display: flex; align-items: center; justify-content: space-between;
       padding: 0.85rem 2rem;
-      background: rgba(15, 23, 42, 0.82);
+      background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--color-divider);
@@ -109,9 +109,9 @@
       font-weight: 700; font-size: 0.95rem;
     }
     .nav-tag {
-      font-family: var(--font-mono); font-size: 0.65rem;
+      font-family: var(--font-mono); font-size: 0.68rem;
       background: var(--color-primary-light); color: var(--color-primary);
-      padding: 2px 8px; border-radius: var(--radius-full); font-weight: 600;
+      padding: 3px 9px; border-radius: var(--radius-full); font-weight: 600;
       letter-spacing: 0.05em; text-transform: uppercase;
     }
     .nav-links {
@@ -135,13 +135,13 @@
 
     /* === HERO / CASE STUDY HEADER === */
     .hero {
-      padding: 8.5rem 1.5rem 4rem;
+      padding: 8.5rem 1.5rem 3.5rem;
       max-width: var(--content-wide);
       margin-inline: auto;
       position: relative;
     }
     .case-badge-bar {
-      display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+      display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;
       margin-bottom: 1.5rem;
     }
     .badge {
@@ -153,19 +153,24 @@
     }
     .badge-primary {
       background: var(--color-primary-light);
-      border-color: rgba(56, 189, 248, 0.3);
+      border-color: rgba(56, 189, 248, 0.35);
       color: var(--color-primary);
     }
     .badge-emerald {
       background: rgba(16, 185, 129, 0.12);
-      border-color: rgba(16, 185, 129, 0.3);
+      border-color: rgba(16, 185, 129, 0.35);
       color: var(--color-accent-emerald);
     }
+    .badge-amber {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.35);
+      color: var(--color-accent-amber);
+    }
     .hero-title {
-      font-size: clamp(2.2rem, 4.2vw, 3.8rem);
+      font-size: clamp(2.2rem, 4vw, 3.6rem);
       letter-spacing: -0.035em;
       margin-bottom: 1.25rem;
-      max-width: 22ch;
+      max-width: 25ch;
     }
     .hero-title span.highlight {
       background: linear-gradient(135deg, var(--color-primary) 0%, #38bdf8 50%, #818cf8 100%);
@@ -174,19 +179,19 @@
     }
     .hero-subtitle {
       font-size: 1.15rem; color: var(--color-text-muted);
-      max-width: 68ch; line-height: 1.7; margin-bottom: 2.25rem;
+      max-width: 70ch; line-height: 1.7; margin-bottom: 2.5rem;
     }
 
     /* === EXECUTIVE METRIC CARDS === */
     .kpi-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem;
       margin-bottom: 3.5rem;
     }
     .kpi-card {
       background: var(--color-surface);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-lg);
-      padding: 1.25rem 1.5rem;
+      padding: 1.35rem 1.5rem;
       box-shadow: var(--shadow-sm);
       position: relative; overflow: hidden;
       transition: transform var(--transition), border-color var(--transition);
@@ -204,16 +209,16 @@
     .kpi-card.amber::before { background: var(--color-accent-amber); }
 
     .kpi-value {
-      font-family: var(--font-mono); font-size: 2.2rem; font-weight: 800;
+      font-family: var(--font-mono); font-size: 2.25rem; font-weight: 800;
       line-height: 1.1; margin-bottom: 0.35rem; color: var(--color-text);
       letter-spacing: -0.04em;
     }
     .kpi-label {
-      font-size: 0.85rem; font-weight: 600; color: var(--color-text);
-      margin-bottom: 0.2rem;
+      font-size: 0.88rem; font-weight: 700; color: var(--color-text);
+      margin-bottom: 0.25rem;
     }
     .kpi-subtext {
-      font-size: 0.75rem; color: var(--color-text-faint);
+      font-size: 0.78rem; color: var(--color-text-faint); line-height: 1.45;
     }
 
     /* === SECTIONS GENERAL === */
@@ -236,7 +241,7 @@
       margin-bottom: 0.75rem;
     }
     .section-desc {
-      color: var(--color-text-muted); font-size: 1rem; max-width: 65ch;
+      color: var(--color-text-muted); font-size: 1rem; max-width: 68ch;
     }
 
     /* === PILLAR 1: PROBLEM (CHALLENGE) === */
@@ -274,7 +279,7 @@
       border: 1px solid var(--color-border);
       border-radius: var(--radius-xl);
       overflow: hidden;
-      margin-top: 2rem;
+      margin-top: 2.25rem;
       box-shadow: var(--shadow-sm);
     }
     .matrix-title {
@@ -301,79 +306,113 @@
     .col-before { color: var(--color-accent-rose); font-weight: 500; }
     .col-after { color: var(--color-accent-emerald); font-weight: 600; }
 
-    /* === PILLAR 2: ACTION (WHAT WAS DONE) === */
+    /* === PILLAR 2: ACTION & 8 FIXES SHOWCASE === */
     .action-grid {
-      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2rem;
-      align-items: center;
+      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 2rem;
+      align-items: start;
     }
-    .action-details { display: flex; flex-direction: column; gap: 1.25rem; }
-    .action-feature {
-      display: flex; gap: 1rem; background: var(--color-surface);
-      border: 1px solid var(--color-border); border-radius: var(--radius-lg);
-      padding: 1.25rem; transition: border-color var(--transition);
+    .fixes-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
     }
-    .action-feature:hover { border-color: var(--color-primary); }
-    .action-feature-icon {
-      flex-shrink: 0; width: 40px; height: 40px; border-radius: var(--radius-md);
+    .fix-item {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem;
+      transition: all var(--transition);
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .fix-item:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+    }
+    .fix-header {
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .fix-num {
+      width: 24px; height: 24px; border-radius: var(--radius-full);
       background: var(--color-primary-light); color: var(--color-primary);
-      display: grid; place-items: center;
+      font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700;
+      display: grid; place-items: center; flex-shrink: 0;
     }
-    .action-feature h4 { font-size: 1rem; margin-bottom: 0.35rem; }
-    .action-feature p { font-size: 0.88rem; color: var(--color-text-muted); line-height: 1.55; }
+    .fix-title {
+      font-size: 0.92rem; font-weight: 700; color: var(--color-text);
+    }
+    .fix-desc {
+      font-size: 0.8rem; color: var(--color-text-muted); line-height: 1.5;
+    }
+    .fix-cmd {
+      font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-primary);
+      background: var(--color-surface-2); padding: 2px 6px; border-radius: var(--radius-sm);
+      display: inline-block; width: fit-content; margin-top: 0.2rem;
+    }
 
-    /* === INTERACTIVE TERMINAL PREVIEW === */
+    /* === INTERACTIVE WINDOWS COMMAND PROMPT TERMINAL === */
     .terminal-box {
-      background: #090d16;
+      background: #0c0d12;
       border: 1px solid #1e293b;
       border-radius: var(--radius-xl);
       overflow: hidden;
       box-shadow: var(--shadow-lg);
+      position: sticky; top: 100px;
     }
     .terminal-top {
-      padding: 0.75rem 1rem;
-      background: #111827; border-bottom: 1px solid #1f2937;
+      padding: 0.65rem 1rem;
+      background: #181d29; border-bottom: 1px solid #232c3d;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .terminal-controls { display: flex; gap: 6px; }
-    .t-dot { width: 11px; height: 11px; border-radius: 50%; }
-    .t-dot.red { background: #ef4444; }
-    .t-dot.yellow { background: #f59e0b; }
-    .t-dot.green { background: #10b981; }
-    .terminal-badge {
-      font-family: var(--font-mono); font-size: 0.7rem; color: #9ca3af;
+    .terminal-title-bar {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.74rem; color: #cbd5e1;
+    }
+    .win-controls {
+      display: flex; gap: 10px; color: #94a3b8; font-size: 0.8rem;
     }
     .terminal-content {
-      padding: 1.5rem;
-      font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.8;
-      color: #e5e7eb;
+      padding: 1.35rem 1.5rem;
+      font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.7;
+      color: #e2e8f0; max-height: 520px; overflow-y: auto;
     }
-    .t-sky { color: #38bdf8; }
+    .t-cyan { color: #38bdf8; }
     .t-green { color: #34d399; }
     .t-amber { color: #fbbf24; }
-    .t-dim { color: #6b7280; }
+    .t-gray { color: #64748b; }
+    .t-white { color: #ffffff; font-weight: bold; }
+    .t-prompt { color: #f59e0b; }
 
-    /* === PILLAR 3: RESULTS & METRICS === */
-    .results-hero-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-      margin-bottom: 2rem;
+    /* === PILLAR 3: APPROVAL & ADOPTION WORKFLOW === */
+    .workflow-timeline {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;
+      position: relative; margin-top: 1rem;
     }
-    .result-box {
+    .timeline-step {
       background: var(--color-surface);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-xl);
-      padding: 1.75rem; text-align: left;
+      padding: 1.75rem 1.5rem;
+      position: relative;
+      display: flex; flex-direction: column; justify-content: space-between;
+      transition: all var(--transition);
     }
-    .result-badge {
-      font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase;
-      padding: 0.2rem 0.6rem; border-radius: var(--radius-full);
-      display: inline-block; margin-bottom: 1rem;
+    .timeline-step:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-3px);
     }
-    .result-num {
-      font-family: var(--font-mono); font-size: 2.8rem; font-weight: 800;
-      color: var(--color-primary); line-height: 1; margin-bottom: 0.5rem;
+    .step-badge {
+      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;
+      color: var(--color-primary); margin-bottom: 0.75rem; text-transform: uppercase;
     }
-    .result-box h4 { font-size: 1.05rem; margin-bottom: 0.5rem; }
-    .result-box p { font-size: 0.85rem; color: var(--color-text-muted); }
+    .timeline-step h4 {
+      font-size: 1.05rem; margin-bottom: 0.6rem;
+    }
+    .timeline-step p {
+      font-size: 0.86rem; color: var(--color-text-muted); line-height: 1.6;
+    }
+    .step-tag {
+      margin-top: 1.25rem; padding: 0.35rem 0.65rem; border-radius: var(--radius-sm);
+      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;
+      background: var(--color-surface-2); color: var(--color-text-muted); width: fit-content;
+    }
 
     /* === PILLAR 4: BUSINESS BENEFITS (ROI & VALUE) === */
     .benefits-grid {
@@ -395,9 +434,9 @@
       display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;
     }
     .benefit-icon {
-      width: 36px; height: 36px; border-radius: var(--radius-md);
+      width: 38px; height: 38px; border-radius: var(--radius-md);
       background: var(--color-surface-2); display: grid; place-items: center;
-      color: var(--color-primary);
+      color: var(--color-primary); flex-shrink: 0;
     }
     .benefit-card h4 { font-size: 1.05rem; }
     .benefit-card p { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.6; }
@@ -422,11 +461,11 @@
       background: linear-gradient(135deg, var(--color-primary) 0%, #6366f1 100%);
       color: #fff; font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700;
       display: grid; place-items: center; flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
     }
     .author-name { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.25rem; }
     .author-role { font-size: 0.9rem; color: var(--color-primary); font-weight: 600; margin-bottom: 0.5rem; }
-    .author-bio { font-size: 0.85rem; color: var(--color-text-muted); max-width: 55ch; }
+    .author-bio { font-size: 0.85rem; color: var(--color-text-muted); max-width: 58ch; }
     .author-actions { display: flex; gap: 0.75rem; flex-shrink: 0; }
     
     .btn {
@@ -460,13 +499,15 @@
     /* === RESPONSIVE === */
     @media (max-width: 992px) {
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .problem-grid, .action-grid, .results-hero-grid, .benefits-grid { grid-template-columns: 1fr; }
+      .problem-grid, .action-grid, .workflow-timeline, .benefits-grid { grid-template-columns: 1fr; }
+      .terminal-box { position: static; }
       .author-card { flex-direction: column; text-align: center; }
       .author-left { flex-direction: column; }
     }
     @media (max-width: 640px) {
       nav .nav-links { display: none; }
       .hero-title { font-size: 2rem; }
+      .fixes-grid { grid-template-columns: 1fr; }
       .kpi-grid { grid-template-columns: 1fr; }
       .matrix-table { font-size: 0.8rem; }
       .matrix-table th, .matrix-table td { padding: 0.75rem 0.85rem; }
@@ -479,15 +520,16 @@
 <nav>
   <div class="nav-brand">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-primary);">
-      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+      <polyline points="4 17 10 11 4 5"></polyline>
+      <line x1="12" y1="19" x2="20" y2="19"></line>
     </svg>
-    <span>Enterprise IT Case Study</span>
-    <span class="nav-tag">EUS Architecture</span>
+    <span>Vikas Singh</span>
+    <span class="nav-tag">IT Endpoint Automation</span>
   </div>
   <ul class="nav-links">
     <li><a href="#challenge">1. The Problem</a></li>
-    <li><a href="#engineering">2. What Was Done</a></li>
-    <li><a href="#results">3. Measured Results</a></li>
+    <li><a href="#engineering">2. What Was Built (8 Fixes)</a></li>
+    <li><a href="#approval">3. Approval &amp; Rollout</a></li>
     <li><a href="#business-impact">4. Business ROI</a></li>
   </ul>
   <div class="nav-cta">
@@ -500,92 +542,93 @@
 <!-- HERO & EXECUTIVE BRIEF -->
 <header class="hero">
   <div class="case-badge-bar">
-    <span class="badge badge-primary"><i data-lucide="cpu" style="width:14px;height:14px;"></i> Enterprise Automation</span>
-    <span class="badge badge-emerald"><i data-lucide="shield-check" style="width:14px;height:14px;"></i> MDM / Intune / SCCM Ready</span>
-    <span class="badge"><i data-lucide="layers" style="width:14px;height:14px;"></i> Cross-Platform: Windows &amp; macOS</span>
-    <span class="badge"><i data-lucide="terminal" style="width:14px;height:14px;"></i> Authored by Vikas Singh</span>
+    <span class="badge badge-primary"><i data-lucide="terminal" style="width:14px;height:14px;"></i> Windows Batch Automation</span>
+    <span class="badge badge-emerald"><i data-lucide="check-circle-2" style="width:14px;height:14px;"></i> 8 One-Click Fixes</span>
+    <span class="badge badge-amber"><i data-lucide="feather" style="width:14px;height:14px;"></i> Under 100 KB Footprint</span>
+    <span class="badge"><i data-lucide="shield-check" style="width:14px;height:14px;"></i> BCG Custom Image Integrated</span>
+    <span class="badge"><i data-lucide="award" style="width:14px;height:14px;"></i> Senior Management Approved</span>
   </div>
 
   <h1 class="hero-title">
-    Automating Enterprise Endpoint Troubleshooting: <span class="highlight">A 88% Reduction in Support MTTR</span>
+    Advanced IT Troubleshooting Utility: <span class="highlight">Self-Service Automation for Enterprise Endpoints</span>
   </h1>
 
   <p class="hero-subtitle">
-    An executive case study on transforming slow, manual L1/L2 desktop support checklists into a standardized, zero-touch automated remediation suite for heterogeneous Windows and macOS fleets.
+    Noticed traveling employees frequently losing billable time to routine network, DNS, and Windows Update issues while waiting on IT queues. Engineered an ultra-compact (&lt;100 KB) self-service batch utility with 8 one-click fixes—approved by senior management after a live demo and adopted into the official BCG custom Windows image and internal IT support suite.
   </p>
 
   <!-- EXECUTIVE KPI STATS -->
   <div class="kpi-grid">
     <div class="kpi-card">
-      <div class="kpi-value">88.7%</div>
-      <div class="kpi-label">MTTR Reduction</div>
-      <div class="kpi-subtext">Resolution time cut from 40 min down to 4.5 min</div>
+      <div class="kpi-value">8</div>
+      <div class="kpi-label">One-Click Fixes</div>
+      <div class="kpi-subtext">Instant automated repair for network, DNS, Windows Update &amp; caches</div>
     </div>
     <div class="kpi-card emerald">
-      <div class="kpi-value">520+</div>
-      <div class="kpi-label">Annual Hours Reclaimed</div>
-      <div class="kpi-subtext">Repetitive engineer toil eliminated across fleet</div>
+      <div class="kpi-value">&lt; 100 KB</div>
+      <div class="kpi-label">Lightweight Footprint</div>
+      <div class="kpi-subtext">Pure native Windows Batch; zero external dependencies or installs</div>
     </div>
     <div class="kpi-card teal">
-      <div class="kpi-value">Zero</div>
-      <div class="kpi-label">User Interruption</div>
-      <div class="kpi-subtext">Silent background execution via MDM pushes</div>
+      <div class="kpi-value">100%</div>
+      <div class="kpi-label">Self-Service Autonomy</div>
+      <div class="kpi-subtext">Traveling users self-heal issues in 60s without waiting on IT</div>
     </div>
     <div class="kpi-card amber">
-      <div class="kpi-value">100%</div>
-      <div class="kpi-label">Audit Compliance</div>
-      <div class="kpi-subtext">Automated JSON logging &amp; 90-day telemetry</div>
+      <div class="kpi-value">BCG</div>
+      <div class="kpi-label">Custom Image Adoption</div>
+      <div class="kpi-subtext">Validated by Windows team &amp; packaged into golden OS build</div>
     </div>
   </div>
 </header>
 
 <hr style="border:none; border-top:1px solid var(--color-divider); max-width:var(--content-wide); margin:0 auto;">
 
-<!-- 01: THE PROBLEM (KYA PROBLEM THI) -->
+<!-- 01: THE PROBLEM (CHALLENGE) -->
 <section class="section-wrap" id="challenge">
   <div class="section-header">
     <div class="section-step"><i data-lucide="alert-triangle" style="width:15px;height:15px;"></i> Phase 1 — The Problem Statement</div>
-    <h2 class="section-heading">Manual, Inconsistent &amp; Unscalable Fleet Maintenance</h2>
+    <h2 class="section-heading">Traveling Users Stranded by Repetitive IT Tickets</h2>
     <p class="section-desc">
-      Prior to standardization, IT support engineers were handling routine system health issues, OS corruption, and performance degradation manually on every device.
+      Users across business units were raising tickets for the same basic operating system glitches, losing valuable hours waiting for IT support—especially while traveling across client sites, hotels, and airports.
     </p>
   </div>
 
   <div class="problem-grid">
     <div class="problem-card">
+      <div class="problem-icon-wrap"><i data-lucide="plane-takeoff" style="width:22px;height:22px;"></i></div>
+      <h3>Traveling Staff Stranded Across Time Zones</h3>
+      <p>
+        Consultants and mobile users traveling to client offices or hotels faced recurring network adapter hangs, stale DNS records, and captive portal drops. With IT operating across specific support hours, users lost hours waiting for remote assistance before important client meetings.
+      </p>
+      <div class="problem-stat-badge">Critical Billable Hours Wasted in Transit</div>
+    </div>
+
+    <div class="problem-card">
+      <div class="problem-icon-wrap"><i data-lucide="ticket" style="width:22px;height:22px;"></i></div>
+      <h3>High Ticket Queue for Basic, Identical Glitches</h3>
+      <p>
+        The IT Service Desk was overwhelmed with high-volume repetitive tickets: corrupted Windows Update download caches, hung print spoolers, unresponsive network stacks, and corrupted Teams/Outlook caches that required the exact same basic troubleshooting commands every single time.
+      </p>
+      <div class="problem-stat-badge">30–45 Mins Average Ticket Wait Time</div>
+    </div>
+
+    <div class="problem-card">
       <div class="problem-icon-wrap"><i data-lucide="clock" style="width:22px;height:22px;"></i></div>
-      <h3>High Mean Time to Resolution (MTTR)</h3>
+      <h3>Disproportionate Time Lost for 2-Minute Fixes</h3>
       <p>
-        A standard ticket involving disk repair, cache purges, SFC/DISM scans, and service optimization required 35–45 minutes of active, manual engineer intervention per laptop, creating massive ticket backlogs.
+        While executing a DNS flush or restarting a frozen Windows service takes under 2 minutes of actual command execution, the end-to-end user turnaround took up to 45 minutes due to ticket logging, queuing, remote desktop connection, and technician availability.
       </p>
-      <div class="problem-stat-badge">Average 40 Minutes Wasted per Incident</div>
+      <div class="problem-stat-badge">Long Resolution Latency for Minor Issues</div>
     </div>
 
     <div class="problem-card">
-      <div class="problem-icon-wrap"><i data-lucide="git-pull-request-draft" style="width:22px;height:22px;"></i></div>
-      <h3>Disjointed Windows vs. macOS Standard</h3>
+      <div class="problem-icon-wrap"><i data-lucide="shield-alert" style="width:22px;height:22px;"></i></div>
+      <h3>Lack of Safe Self-Service Tooling for Non-Tech Users</h3>
       <p>
-        The support team operated with zero standardized playbook across operating systems. Windows troubleshooting was ad-hoc via GUI menus, while macOS endpoints were frequently escalated due to lack of deep shell tooling.
+        End users could not safely resolve issues themselves. Running manual commands like <code style="font-family:var(--font-mono);font-size:0.75rem;">netsh int ip reset</code> or clearing <code style="font-family:var(--font-mono);font-size:0.75rem;">SoftwareDistribution</code> manually required command-line knowledge and elevated privileges, posing risks of accidental misconfiguration.
       </p>
-      <div class="problem-stat-badge">Inconsistent SLAs Across Operating Systems</div>
-    </div>
-
-    <div class="problem-card">
-      <div class="problem-icon-wrap"><i data-lucide="refresh-cw-off" style="width:22px;height:22px;"></i></div>
-      <h3>Inability to Automate via Intune / SCCM</h3>
-      <p>
-        Maintenance scripts lacked silent CLI argument capabilities, dry-run safety modes, and atomic process locking. This made silent push via enterprise MDM tools risky and impossible to run at scale.
-      </p>
-      <div class="problem-stat-badge">0% Silent Deployment Capability</div>
-    </div>
-
-    <div class="problem-card">
-      <div class="problem-icon-wrap"><i data-lucide="file-x" style="width:22px;height:22px;"></i></div>
-      <h3>Zero Audit Trails &amp; Root-Cause Diagnostics</h3>
-      <p>
-        Support engineers performed fixes without generating persistent local logs or telemetry. IT management had no visibility into recurring hardware degradation, battery wear, or recurring corrupted OS binaries.
-      </p>
-      <div class="problem-stat-badge">No Diagnostic Retention or Telemetry</div>
+      <div class="problem-stat-badge">Zero Safe One-Click Options Available</div>
     </div>
   </div>
 
@@ -593,41 +636,41 @@
   <div class="matrix-card">
     <div class="matrix-title">
       <span>Operational Benchmark: Before vs. After Implementation</span>
-      <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--color-primary);">VERIFIED FLEET METRIC</span>
+      <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--color-primary);">ENTERPRISE MEASURED IMPACT</span>
     </div>
     <table class="matrix-table">
       <thead>
         <tr>
-          <th>Metric / Workflow</th>
-          <th>Legacy Manual Workflow (Before)</th>
-          <th>Automated IT Utility (After)</th>
+          <th>Operational Metric</th>
+          <th>Before (Manual Support Queue)</th>
+          <th>After (Advanced Troubleshooting Utility)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Execution Mechanism</strong></td>
-          <td class="col-before">Manual mouse clicks &amp; multiple standalone command prompts</td>
-          <td class="col-after">Single-command execution or silent zero-touch MDM rollout</td>
+          <td><strong>Resolution Workflow</strong></td>
+          <td class="col-before">Log IT ticket → wait in queue → remote screen share → technician manual commands</td>
+          <td class="col-after">Open utility → select 1 of 8 fixes → automated remediation completes in &lt;60s</td>
         </tr>
         <tr>
-          <td><strong>Average Remediation Time</strong></td>
-          <td class="col-before">35 to 45 minutes per endpoint</td>
-          <td class="col-after">3.5 to 5 minutes fully automated</td>
+          <td><strong>Support for Traveling Users</strong></td>
+          <td class="col-before">Completely stranded if offline or outside IT service desk operating hours</td>
+          <td class="col-after">100% self-service execution on the laptop; zero internet dependency to run fixes</td>
         </tr>
         <tr>
-          <td><strong>Safety &amp; Process Lock</strong></td>
-          <td class="col-before">None; potential race condition from multiple simultaneous runs</td>
-          <td class="col-after">Atomic PID locking &amp; pre-flight disk space safety verification</td>
+          <td><strong>Average User Wait Time</strong></td>
+          <td class="col-before">30 to 45 minutes of lost productivity per incident</td>
+          <td class="col-after">Instant self-service resolution in under 1 minute</td>
         </tr>
         <tr>
-          <td><strong>Risk Mitigation</strong></td>
-          <td class="col-before">Live destruction testing without preview</td>
-          <td class="col-after"><code style="font-family:var(--font-mono);font-size:0.8em;">--dry-run</code> flag to inspect destructive actions prior to commit</td>
+          <td><strong>Footprint &amp; Complexity</strong></td>
+          <td class="col-before">Heavy third-party agents or multiple scattered troubleshooting scripts</td>
+          <td class="col-after">Ultra-lightweight (&lt;100 KB) native Windows Batch script; zero installation</td>
         </tr>
         <tr>
-          <td><strong>Diagnostic Audit Trail</strong></td>
-          <td class="col-before">None; verbal or manual ticket notes only</td>
-          <td class="col-after">Automated JSON telemetry + 10MB auto-rotated syslog (90 days)</td>
+          <td><strong>Fleet Standardization</strong></td>
+          <td class="col-before">Individual technicians ran inconsistent, ad-hoc terminal commands</td>
+          <td class="col-after">Standardized in BCG Custom Windows Image and internal IT tool for entire organization</td>
         </tr>
       </tbody>
     </table>
@@ -636,80 +679,148 @@
 
 <hr style="border:none; border-top:1px solid var(--color-divider); max-width:var(--content-wide); margin:0 auto;">
 
-<!-- 02: WHAT WAS DONE (MAINE KYA KIYA) -->
+<!-- 02: WHAT WAS DONE (ENGINEERING & 8 ONE-CLICK FIXES) -->
 <section class="section-wrap" id="engineering">
   <div class="section-header">
-    <div class="section-step"><i data-lucide="code" style="width:15px;height:15px;"></i> Phase 2 — Engineering &amp; Execution</div>
-    <h2 class="section-heading">Architecting the Automated Endpoint Utility</h2>
+    <div class="section-step"><i data-lucide="code" style="width:15px;height:15px;"></i> Phase 2 — Engineering &amp; Architecture</div>
+    <h2 class="section-heading">Building the &lt;100 KB Self-Service Batch Utility</h2>
     <p class="section-desc">
-      Engineered an enterprise-ready, dual-OS automation suite designed for unattended L1/L2 support, remote silent deployment, and robust system integrity.
+      Architected a standalone, menu-driven Windows Batch utility designed specifically for non-technical employees and internal L1 technicians, packaging the top 8 diagnostic and recovery procedures into instant one-click actions.
     </p>
   </div>
 
   <div class="action-grid">
-    <div class="action-details">
-      <div class="action-feature">
-        <div class="action-feature-icon"><i data-lucide="cpu"></i></div>
-        <div>
-          <h4>Cross-Platform Native Script Engines</h4>
-          <p>
-            Developed <code style="font-family:var(--font-mono); color:var(--color-primary);">windows_maintenance_final.bat</code> (Windows 10/11) and <code style="font-family:var(--font-mono); color:var(--color-primary);">maintenance.sh</code> with strict POSIX standards (<code style="font-family:var(--font-mono);font-size:0.75rem;">set -Eeuo pipefail</code>) on macOS Ventura/Sonoma/Sequoia.
-          </p>
+    <div>
+      <div class="fixes-grid">
+        <!-- Fix 1 -->
+        <div class="fix-item">
+          <div class="fix-header">
+            <span class="fix-num">1</span>
+            <span class="fix-title">Complete Network Reset</span>
+          </div>
+          <p class="fix-desc">Resets the TCP/IP stack and Winsock catalog back to clean default states after hotel or captive Wi-Fi lockups.</p>
+          <span class="fix-cmd">netsh int ip reset &amp; winsock reset</span>
         </div>
-      </div>
 
-      <div class="action-feature">
-        <div class="action-feature-icon"><i data-lucide="send"></i></div>
-        <div>
-          <h4>Silent Headless MDM Integration (Intune &amp; SCCM)</h4>
-          <p>
-            Engineered 15+ CLI arguments (e.g. <code style="font-family:var(--font-mono);font-size:0.75rem;">--silent</code>, <code style="font-family:var(--font-mono);font-size:0.75rem;">--auto</code>, <code style="font-family:var(--font-mono);font-size:0.75rem;">--sfc</code>, <code style="font-family:var(--font-mono);font-size:0.75rem;">--cleanup</code>) enabling enterprise distribution without popping up disruptive windows on end-user screens.
-          </p>
+        <!-- Fix 2 -->
+        <div class="fix-item">
+          <div class="fix-header">
+            <span class="fix-num">2</span>
+            <span class="fix-title">DNS Flush &amp; IP Renewal</span>
+          </div>
+          <p class="fix-desc">Purges corrupted local DNS resolver cache, releases expired DHCP addresses, and queries a fresh IP lease.</p>
+          <span class="fix-cmd">ipconfig /flushdns /renew</span>
         </div>
-      </div>
 
-      <div class="action-feature">
-        <div class="action-feature-icon"><i data-lucide="shield"></i></div>
-        <div>
-          <h4>Fail-Safe Mechanisms &amp; Dry-Run Engine</h4>
-          <p>
-            Integrated atomic process locks (PID validation to stop duplicate execution), automated disk space pre-flight checks, and non-destructive <code style="font-family:var(--font-mono);font-size:0.75rem;">--dry-run</code> modes to safeguard production machines.
-          </p>
+        <!-- Fix 3 -->
+        <div class="fix-item">
+          <div class="fix-header">
+            <span class="fix-num">3</span>
+            <span class="fix-title">Windows Update Repair</span>
+          </div>
+          <p class="fix-desc">Stops wuauserv &amp; BITS, purges corrupted SoftwareDistribution download files, and cleanly restarts daemons.</p>
+          <span class="fix-cmd">net stop wuauserv &amp; del cache</span>
         </div>
-      </div>
 
-      <div class="action-feature">
-        <div class="action-feature-icon"><i data-lucide="message-square"></i></div>
-        <div>
-          <h4>Natural Language Issue Triage Router</h4>
-          <p>
-            Engineered an intelligent routing subsystem on Windows where L1 technicians can type queries in plain conversational English (e.g., "slow network", "office crashing"), which auto-routes directly to the right troubleshooting module.
-          </p>
+        <!-- Fix 4 -->
+        <div class="fix-item">
+          <div class="fix-header">
+            <span class="fix-num">4</span>
+            <span class="fix-title">Enterprise App Cache Flush</span>
+          </div>
+          <p class="fix-desc">Safely purges corrupted local app caches for Microsoft Teams, Outlook, and web browsers to fix launch crashes.</p>
+          <span class="fix-cmd">rd /s /q %localappdata%\Microsoft\Teams</span>
+        </div>
+
+        <!-- Fix 5 -->
+        <div class="fix-item">
+          <div class="fix-header">
+            <span class="fix-num">5</span>
+            <span class="fix-title">Print Spooler Reset</span>
+          </div>
+          <p class="fix-desc">Restarts hung spoolsv service and clears jammed print jobs locked in the Windows print queue directory.</p>
+          <span class="fix-cmd">net stop spooler &amp; del *.shd</span>
+        </div>
+
+        <!-- Fix 6 -->
+        <div class="fix-item">
+          <div class="fix-header">
+            <span class="fix-num">6</span>
+            <span class="fix-title">System File Integrity Scan</span>
+          </div>
+          <p class="fix-desc">Initiates automated, non-destructive System File Checker to detect and restore corrupted Windows OS components.</p>
+          <span class="fix-cmd">sfc /scannow</span>
+        </div>
+
+        <!-- Fix 7 -->
+        <div class="fix-item">
+          <div class="fix-header">
+            <span class="fix-num">7</span>
+            <span class="fix-title">Temp Files &amp; Disk Cleanup</span>
+          </div>
+          <p class="fix-desc">Cleans locked user temp folders and orphaned installation buffers without deleting personal files.</p>
+          <span class="fix-cmd">del /f /s /q %temp%\*</span>
+        </div>
+
+        <!-- Fix 8 -->
+        <div class="fix-item">
+          <div class="fix-header">
+            <span class="fix-num">8</span>
+            <span class="fix-title">Diagnostic System Summary</span>
+          </div>
+          <p class="fix-desc">Generates an instant, exportable text report with active IP status, gateway connectivity, and uptime for IT escalations.</p>
+          <span class="fix-cmd">netsh &amp; systeminfo &gt; report.txt</span>
         </div>
       </div>
     </div>
 
-    <!-- TERMINAL DEMO PREVIEW -->
+    <!-- TERMINAL DEMO: COMMAND PROMPT STYLE -->
     <div class="terminal-box">
       <div class="terminal-top">
-        <div class="terminal-controls">
-          <div class="t-dot red"></div>
-          <div class="t-dot yellow"></div>
-          <div class="t-dot green"></div>
+        <div class="terminal-title-bar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="4 17 10 11 4 5"></polyline>
+            <line x1="12" y1="19" x2="20" y2="19"></line>
+          </svg>
+          <span>Command Prompt - IT-Troubleshoot.bat [Admin]</span>
         </div>
-        <div class="terminal-badge">maintenance.sh — Silent Fleet Run</div>
+        <div class="win-controls">
+          <span>─</span>
+          <span>□</span>
+          <span>✕</span>
+        </div>
       </div>
       <div class="terminal-content">
-        <div><span class="t-sky">enterprise-fleet@endpoint-0412</span> <span class="t-dim">~ #</span> sudo ./maintenance.sh --auto --silent</div>
-        <div class="t-dim">[INIT] Validating atomic PID lock... OK (Lock ID: 29401)</div>
-        <div class="t-dim">[PREFLIGHT] Checking disk capacity... 48.2 GB Available (Pass)</div>
-        <div><span class="t-green">✔ [PASS]</span> Windows/macOS Temp Purged <span class="t-dim">(Reclaimed 14.2 GB)</span></div>
-        <div><span class="t-green">✔ [PASS]</span> System File Integrity Checked <span class="t-dim">(SFC/DISM 0 Errors)</span></div>
-        <div><span class="t-green">✔ [PASS]</span> Enterprise App Cache Flushed <span class="t-dim">(Teams/Outlook/Chrome)</span></div>
-        <div><span class="t-green">✔ [PASS]</span> Non-essential Services Disabled <span class="t-dim">(21 Services)</span></div>
-        <div><span class="t-green">✔ [PASS]</span> Battery Health Telemetry Generated <span class="t-dim">(Cycle: 142, 94%)</span></div>
-        <div class="t-sky">➜ [REPORT] JSON Export saved to /Library/Logs/EnterpriseIT/Report.json</div>
-        <div class="t-amber">➜ [STATUS] Execution completed in 3m 42s with ZERO user prompts.</div>
+        <div class="t-cyan">===============================================================</div>
+        <div class="t-white"> BCG IT SUPPORT -- ADVANCED TROUBLESHOOTING UTILITY (v2.4)</div>
+        <div class="t-gray"> Footprint: 84 KB | Native Batch | Endpoint Self-Service</div>
+        <div class="t-cyan">===============================================================</div>
+        <br>
+        <div> [1] Complete Network Reset (TCP/IP &amp; Winsock Reset)</div>
+        <div> [2] DNS Flush &amp; IP Lease Release/Renew</div>
+        <div> [3] Windows Update Service &amp; Cache Repair</div>
+        <div> [4] Flush Teams / Outlook / Office App Caches</div>
+        <div> [5] Restart Print Spooler &amp; Purge Stuck Print Queues</div>
+        <div> [6] System File Checker Integrity Scan (SFC)</div>
+        <div> [7] Clean User &amp; System Temporary Files</div>
+        <div> [8] Generate Network &amp; Hardware Diagnostic Report</div>
+        <div> [Q] Quit Utility</div>
+        <br>
+        <div class="t-cyan">---------------------------------------------------------------</div>
+        <div><span class="t-prompt">Select an option [1-8, Q]:</span> 2</div>
+        <div class="t-cyan">---------------------------------------------------------------</div>
+        <br>
+        <div class="t-gray">[1/3] Flushing Windows DNS Resolver Cache...</div>
+        <div class="t-green">  ✔ Successfully flushed the DNS Resolver Cache.</div>
+        <div class="t-gray">[2/3] Releasing and renewing DHCP IPv4/IPv6 leases...</div>
+        <div class="t-green">  ✔ Adapter "Wi-Fi" leased new IP: 10.142.28.109</div>
+        <div class="t-gray">[3/3] Re-registering DNS connection with domain controller...</div>
+        <div class="t-green">  ✔ Registration of DNS records initiated successfully.</div>
+        <br>
+        <div class="t-amber">===============================================================</div>
+        <div class="t-white"> [SUCCESS] Network and DNS resolution restored in 14 seconds!</div>
+        <div class="t-amber">===============================================================</div>
+        <div class="t-gray">Press any key to return to main menu...</div>
       </div>
     </div>
   </div>
@@ -717,49 +828,64 @@
 
 <hr style="border:none; border-top:1px solid var(--color-divider); max-width:var(--content-wide); margin:0 auto;">
 
-<!-- 03: MEASURED RESULTS (KYA RESULT AAYA) -->
-<section class="section-wrap" id="results">
+<!-- 03: MANAGEMENT APPROVAL & ENTERPRISE ADOPTION -->
+<section class="section-wrap" id="approval">
   <div class="section-header">
-    <div class="section-step"><i data-lucide="bar-chart-3" style="width:15px;height:15px;"></i> Phase 3 — Quantified Outcomes</div>
-    <h2 class="section-heading">Hard Data &amp; Operational Benchmarks</h2>
+    <div class="section-step"><i data-lucide="check-check" style="width:15px;height:15px;"></i> Phase 3 — Executive Approval &amp; Rollout</div>
+    <h2 class="section-heading">From Prototype to Enterprise Standard</h2>
     <p class="section-desc">
-      Following deployment across managed company workstations, the project delivered immediate, measurable performance gains across IT support metrics.
+      How proactive engineering turned a lightweight script into a company-wide corporate standard deployed across the BCG endpoint infrastructure.
     </p>
   </div>
 
-  <div class="results-hero-grid">
-    <div class="result-box">
-      <span class="result-badge badge-primary">Speed Improvement</span>
-      <div class="result-num">4.5<span style="font-size:1.5rem;"> min</span></div>
-      <h4>From 40 Min to 4.5 Min MTTR</h4>
-      <p>Routine endpoint tune-ups and diagnostic routines experienced an 88.7% reduction in turnaround time.</p>
+  <div class="workflow-timeline">
+    <div class="timeline-step">
+      <div>
+        <div class="step-badge">Step 01 · Proactive Build</div>
+        <h4>Identified User Friction</h4>
+        <p>Observed continuous ticket patterns of traveling consultants losing hours to basic connectivity and update freezes. Engineered the &lt;100 KB utility independently to solve real user pain points.</p>
+      </div>
+      <div class="step-tag">Initial Prototype</div>
     </div>
 
-    <div class="result-box">
-      <span class="result-badge badge-emerald">Ticket Deflection</span>
-      <div class="result-num">74%</div>
-      <h4>Reduction in L2 Escalations</h4>
-      <p>L1 analysts successfully rectified OS corruption, crashing Microsoft 365 apps, and cache bottlenecks at first touch.</p>
+    <div class="timeline-step">
+      <div>
+        <div class="step-badge">Step 02 · Live Pitch</div>
+        <h4>Executive Demo</h4>
+        <p>Conducted a live demonstration for direct IT manager and senior management, showing how an employee can resolve a 45-minute support ticket in 30 seconds with a single click.</p>
+      </div>
+      <div class="step-tag">Leadership Presentation</div>
     </div>
 
-    <div class="result-box">
-      <span class="result-badge" style="background:rgba(245, 158, 11, 0.12); color:var(--color-accent-amber);">Fleet Capacity</span>
-      <div class="result-num">14+</div>
-      <h4>Automated Enterprise Workflows</h4>
-      <p>20+ services tuned, network stack flushed, hardware diagnostics verified, and local logs rotated without human error.</p>
+    <div class="timeline-step">
+      <div>
+        <div class="step-badge">Step 03 · Management Sign-Off</div>
+        <h4>Formal Approval</h4>
+        <p>Received unanimous approval and accolades from leadership for creating a zero-cost, high-impact self-service tool that directly reduces support ticket volumes.</p>
+      </div>
+      <div class="step-tag">Executive Approval</div>
+    </div>
+
+    <div class="timeline-step">
+      <div>
+        <div class="step-badge">Step 04 · Fleet Rollout</div>
+        <h4>BCG Custom Image Integration</h4>
+        <p>The enterprise Windows team reviewed code safety, approved production standards, and embedded the tool directly into the official BCG custom Windows image and the internal IT toolkit.</p>
+      </div>
+      <div class="step-tag">Golden Image Deployed</div>
     </div>
   </div>
 </section>
 
 <hr style="border:none; border-top:1px solid var(--color-divider); max-width:var(--content-wide); margin:0 auto;">
 
-<!-- 04: BUSINESS BENEFITS & ROI (KYA BENEFITS MILE) -->
+<!-- 04: BUSINESS BENEFITS & STRATEGIC VALUE -->
 <section class="section-wrap" id="business-impact">
   <div class="section-header">
     <div class="section-step"><i data-lucide="trending-up" style="width:15px;height:15px;"></i> Phase 4 — Strategic Business Value</div>
-    <h2 class="section-heading">Executive &amp; Organizational Benefits</h2>
+    <h2 class="section-heading">Executive &amp; Operational Impact</h2>
     <p class="section-desc">
-      How this engineering project translated technical scripting into executive ROI, compliance safety, and enterprise productivity.
+      Measurable return on investment across employee productivity, support efficiency, and enterprise endpoint reliability.
     </p>
   </div>
 
@@ -767,79 +893,79 @@
     <div class="benefit-card">
       <div>
         <div class="benefit-header">
-          <div class="benefit-icon"><i data-lucide="dollar-sign"></i></div>
-          <h4>Direct Support Cost Reduction</h4>
+          <div class="benefit-icon"><i data-lucide="globe"></i></div>
+          <h4>Continuous Mobile Productivity</h4>
         </div>
         <p>
-          By saving ~35 minutes per device maintenance ticket across hundreds of endpoints, the IT department recovered hundreds of engineering hours annually, cutting cost-per-ticket dramatically.
+          Consultants working internationally or at client offices can self-heal connectivity drops and update hangs in seconds, preventing missed meetings and preserving billable hours.
         </p>
       </div>
-      <div class="benefit-tag">Financial &amp; Resource ROI</div>
+      <div class="benefit-tag">Traveling Workforce</div>
+    </div>
+
+    <div class="benefit-card">
+      <div>
+        <div class="benefit-header">
+          <div class="benefit-icon"><i data-lucide="inbox"></i></div>
+          <h4>Massive Ticket Queue Deflection</h4>
+        </div>
+        <p>
+          Eliminated high-volume, low-complexity L1 tickets for basic DNS, network, and update issues, liberating IT engineers to focus on high-priority infrastructure and security incidents.
+        </p>
+      </div>
+      <div class="benefit-tag">Service Desk Capacity</div>
+    </div>
+
+    <div class="benefit-card">
+      <div>
+        <div class="benefit-header">
+          <div class="benefit-icon"><i data-lucide="dollar-sign"></i></div>
+          <h4>Zero Licensing &amp; Infrastructure Cost</h4>
+        </div>
+        <p>
+          Built entirely on native Windows Batch scripting (&lt;100 KB footprint), delivering an enterprise self-healing solution with zero software licenses, agent overhead, or recurring fees.
+        </p>
+      </div>
+      <div class="benefit-tag">Cost Efficiency</div>
+    </div>
+
+    <div class="benefit-card">
+      <div>
+        <div class="benefit-header">
+          <div class="benefit-icon"><i data-lucide="layers"></i></div>
+          <h4>BCG Gold Master Integration</h4>
+        </div>
+        <p>
+          Incorporated into the BCG custom Windows image (Standard Operating Environment), guaranteeing every newly provisioned laptop is equipped with self-service capabilities on day one.
+        </p>
+      </div>
+      <div class="benefit-tag">Fleet Standardization</div>
     </div>
 
     <div class="benefit-card">
       <div>
         <div class="benefit-header">
           <div class="benefit-icon"><i data-lucide="user-check"></i></div>
-          <h4>Zero Downtime for End Users</h4>
+          <h4>Internal IT Toolkit Standardization</h4>
         </div>
         <p>
-          Executives, consultants, and staff are no longer forced to give up their laptops for hours during business calls. Maintenance runs silently in the background or during off-hours through MDM.
+          Service Desk analysts use the exact same standardized utility during remote troubleshooting calls, establishing deterministic, error-free repair procedures across the global team.
         </p>
       </div>
-      <div class="benefit-tag">Employee Productivity</div>
+      <div class="benefit-tag">Operational Consistency</div>
     </div>
 
     <div class="benefit-card">
       <div>
         <div class="benefit-header">
-          <div class="benefit-icon"><i data-lucide="file-check"></i></div>
-          <h4>Audit &amp; Compliance Readiness</h4>
+          <div class="benefit-icon"><i data-lucide="shield-check"></i></div>
+          <h4>Safe &amp; Guarded Execution</h4>
         </div>
         <p>
-          Structured JSON health telemetry, battery wear rates, and OS integrity checks are stored locally and are ready for SIEM ingestion, empowering IT leadership with actionable fleet intelligence.
+          Built-in administrator privilege checks, confirmation safeguards, and non-destructive service cleanups protect systems from user error while restoring system health reliably.
         </p>
       </div>
-      <div class="benefit-tag">Governance &amp; Security</div>
-    </div>
-
-    <div class="benefit-card">
-      <div>
-        <div class="benefit-header">
-          <div class="benefit-icon"><i data-lucide="shield-alert"></i></div>
-          <h4>Elimination of Human Error</h4>
-        </div>
-        <p>
-          Eliminated accidental deletions or misconfigured registry settings caused by manual technician intervention. Deterministic scripts execute identical logic on every single device.
-        </p>
-      </div>
-      <div class="benefit-tag">Operational Stability</div>
-    </div>
-
-    <div class="benefit-card">
-      <div>
-        <div class="benefit-header">
-          <div class="benefit-icon"><i data-lucide="zap"></i></div>
-          <h4>Accelerated L1 Onboarding</h4>
-        </div>
-        <p>
-          New support engineers do not require weeks of training on complex terminal commands or manual registry tweaks. The natural language router and unified script allow immediate productivity.
-        </p>
-      </div>
-      <div class="benefit-tag">Team Scalability</div>
-    </div>
-
-    <div class="benefit-card">
-      <div>
-        <div class="benefit-header">
-          <div class="benefit-icon"><i data-lucide="server"></i></div>
-          <h4>Standardized SLA Across OS Fleets</h4>
-        </div>
-        <p>
-          Bridged the historical operational gap between Windows and macOS endpoint support, unifying both under a singular corporate service-level agreement.
-        </p>
-      </div>
-      <div class="benefit-tag">Infrastructure Alignment</div>
+      <div class="benefit-tag">Security &amp; Safety</div>
     </div>
   </div>
 </section>
@@ -853,13 +979,13 @@
         <h3 class="author-name">Vikas Singh</h3>
         <div class="author-role">System Analyst · Endpoint Automation &amp; Infrastructure Operations</div>
         <p class="author-bio">
-          Specializing in Enterprise Endpoint Management (EUS), Intune/SCCM orchestration, cross-platform scripting (PowerShell/Bash), and architecting automated support systems for enterprise environments.
+          Specializing in enterprise endpoint automation, Windows OS customization, self-service support architecture, and fleet-wide operational efficiency. Initiated and engineered the Advanced Troubleshooting Utility adopted across corporate Windows builds.
         </p>
       </div>
     </div>
     <div class="author-actions">
       <a href="https://github.com/Vikas3333-singh" target="_blank" rel="noopener noreferrer" class="btn btn-solid">
-        <i data-lucide="github" style="width:16px;height:16px;"></i> View Repository
+        <i data-lucide="github" style="width:16px;height:16px;"></i> View GitHub
       </a>
       <a href="https://www.linkedin.com/in/vikas-singh" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
         <i data-lucide="linkedin" style="width:16px;height:16px;"></i> LinkedIn Profile
@@ -870,7 +996,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2025 Vikas Singh · Enterprise Endpoint Maintenance &amp; Automation Case Study · Deployed Architecture</p>
+  <p>© 2025 Vikas Singh · Advanced IT Troubleshooting Utility Case Study · BCG Custom Windows Image Integrated</p>
 </footer>
 
 <script>
