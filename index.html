@@ -95,6 +95,27 @@
       outline-offset: 3px;
       border-radius: var(--radius-sm);
     }
+    .skip-link {
+      position: fixed;
+      top: -100px;
+      left: 1.5rem;
+      z-index: 2000;
+      padding: 0.65rem 1.25rem;
+      background: var(--color-primary);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.88rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      transition: top var(--transition);
+      text-decoration: none;
+    }
+    .skip-link:focus, .skip-link:focus-visible {
+      top: 1rem;
+    }
+    #main-content:focus {
+      outline: none;
+    }
 
     /* === UTILITY NAVIGATION === */
     nav {
@@ -521,6 +542,8 @@
 </head>
 <body>
 
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <!-- TOP NAV -->
 <nav>
   <div class="nav-brand">
@@ -543,6 +566,9 @@
     </button>
   </div>
 </nav>
+
+<!-- MAIN CONTENT -->
+<main id="main-content" tabindex="-1">
 
 <!-- HERO & EXECUTIVE BRIEF -->
 <header class="hero">
@@ -998,6 +1024,8 @@
     </div>
   </div>
 </section>
+
+</main>
 
 <!-- FOOTER -->
 <footer>
