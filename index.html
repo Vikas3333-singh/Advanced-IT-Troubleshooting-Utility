@@ -95,6 +95,19 @@
       outline-offset: 3px;
       border-radius: var(--radius-sm);
     }
+    .skip-link {
+      position: fixed; top: -120px; left: 1.5rem; z-index: 10000;
+      background: var(--color-surface); color: var(--color-primary);
+      padding: 0.65rem 1.25rem; font-weight: 700; font-size: 0.88rem;
+      border: 2px solid var(--color-primary); border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg); transition: top 150ms ease-in-out;
+    }
+    .skip-link:focus, .skip-link:focus-visible { top: 1.25rem; outline: none; }
+    #main-content:focus { outline: none; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      html { scroll-behavior: auto; }
+    }
 
     /* === UTILITY NAVIGATION === */
     nav {
@@ -520,9 +533,10 @@
   </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- TOP NAV -->
-<nav>
+<nav aria-label="Main navigation">
   <div class="nav-brand">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-primary);">
       <polyline points="4 17 10 11 4 5"></polyline>
@@ -545,6 +559,7 @@
 </nav>
 
 <!-- HERO & EXECUTIVE BRIEF -->
+<main id="main-content" tabindex="-1">
 <header class="hero">
   <div class="case-badge-bar">
     <span class="badge badge-primary"><i data-lucide="terminal" style="width:14px;height:14px;"></i> Windows Batch Automation</span>
@@ -789,7 +804,7 @@
           </svg>
           <span>Command Prompt - IT-Troubleshoot.bat [Admin]</span>
         </div>
-        <div class="win-controls">
+        <div class="win-controls" aria-hidden="true">
           <span>─</span>
           <span>□</span>
           <span>✕</span>
@@ -998,6 +1013,7 @@
     </div>
   </div>
 </section>
+</main>
 
 <!-- FOOTER -->
 <footer>
