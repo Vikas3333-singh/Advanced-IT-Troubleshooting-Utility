@@ -96,6 +96,32 @@
       border-radius: var(--radius-sm);
     }
 
+    /* === ACCESSIBILITY: SKIP LINK & REDUCED MOTION === */
+    .skip-link {
+      position: fixed;
+      top: -100px;
+      left: 1.5rem;
+      z-index: 10001;
+      padding: 0.65rem 1.25rem;
+      background: var(--color-surface);
+      color: var(--color-primary);
+      border: 2px solid var(--color-primary);
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+      text-decoration: none;
+      transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .skip-link:focus {
+      top: 1rem;
+      outline: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+
     /* === UTILITY NAVIGATION === */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
@@ -521,6 +547,8 @@
 </head>
 <body>
 
+<a href="#main" class="skip-link">Skip to main content</a>
+
 <!-- TOP NAV -->
 <nav>
   <div class="nav-brand">
@@ -543,6 +571,8 @@
     </button>
   </div>
 </nav>
+
+<main id="main" tabindex="-1">
 
 <!-- HERO & EXECUTIVE BRIEF -->
 <header class="hero">
@@ -998,6 +1028,8 @@
     </div>
   </div>
 </section>
+
+</main>
 
 <!-- FOOTER -->
 <footer>
