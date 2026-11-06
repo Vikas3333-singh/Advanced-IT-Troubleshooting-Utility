@@ -124,7 +124,12 @@
     .fix-number { display: grid; place-items: center; width: 29px; height: 29px; color: var(--blue); background: var(--blue-wash); border: 1px solid rgba(85,168,255,.22); border-radius: 8px; font: 700 11px var(--mono); }
     .fix-card h3 { margin: 0; font-size: 14px; }
     .fix-card p { margin: 0 0 14px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .command-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-top: auto; }
     .command { display: inline-block; max-width: 100%; padding: 5px 8px; color: #8ec5ff; background: rgba(3,10,19,.55); border: 1px solid #263a54; border-radius: 6px; font: 10px/1.5 var(--mono); overflow-wrap: anywhere; }
+    .btn-copy { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; font: 600 10px/1 var(--mono); color: var(--subtle); background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 6px; cursor: pointer; transition: all .2s; }
+    .btn-copy:hover { color: var(--text); border-color: var(--blue); background: var(--blue-wash); }
+    .btn-copy.copied { color: var(--green); border-color: var(--green); background: var(--green-wash); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     .architecture { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-top: 28px; }
     .arch-step { position: relative; padding: 17px 14px; background: rgba(16,27,44,.78); border: 1px solid var(--line); border-radius: 12px; }
     .arch-step:not(:last-child)::after { content: "→"; position: absolute; top: 50%; right: -13px; z-index: 2; transform: translateY(-50%); color: var(--blue); font: 16px var(--mono); }
@@ -280,14 +285,14 @@
       <div class="wrap">
         <div class="section-head reveal"><div class="eyebrow">02 / The solution</div><h2>Eight fixes. One lightweight utility.</h2><p>A standalone, menu-driven Windows Batch utility for non-technical employees and internal L1 technicians. It packages common diagnostic and recovery procedures into guided, one-click actions.</p></div>
         <div class="fixes-grid">
-          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">01</span><h3>Complete network reset</h3></div><p>Resets the TCP/IP stack and Winsock catalog to clean default states after hotel or captive Wi-Fi lockups.</p><code class="command">netsh int ip reset · winsock reset</code></article>
-          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">02</span><h3>DNS flush &amp; IP renewal</h3></div><p>Purges the local DNS resolver cache, releases expired DHCP addresses, and requests a fresh IP lease.</p><code class="command">ipconfig /flushdns · renew</code></article>
-          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">03</span><h3>Windows Update repair</h3></div><p>Stops Windows Update and BITS services, clears corrupted SoftwareDistribution download files, and restarts services.</p><code class="command">wuauserv · BITS · cache cleanup</code></article>
-          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">04</span><h3>Teams / Outlook cache cleanup</h3></div><p>Safely purges corrupted local application caches for Microsoft Teams, Outlook, and web browsers to address launch crashes.</p><code class="command">%localappdata% · app cache</code></article>
-          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">05</span><h3>Print spooler reset</h3></div><p>Restarts a hung spooler service and clears jammed print jobs locked in the Windows print queue directory.</p><code class="command">spooler service · print queue</code></article>
-          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">06</span><h3>System File Checker scan</h3></div><p>Initiates the non-destructive SFC scan to detect and restore corrupted Windows operating system components.</p><code class="command">sfc /scannow</code></article>
-          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">07</span><h3>Temporary files cleanup</h3></div><p>Cleans locked user temporary folders and orphaned installation buffers without targeting personal files.</p><code class="command">%temp% · safe cleanup</code></article>
-          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">08</span><h3>Diagnostic system summary</h3></div><p>Generates an exportable text report with active IP status, gateway connectivity, and system uptime for IT escalation.</p><code class="command">netsh · systeminfo · report.txt</code></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">01</span><h3>Complete network reset</h3></div><p>Resets the TCP/IP stack and Winsock catalog to clean default states after hotel or captive Wi-Fi lockups.</p><div class="command-row"><code class="command">netsh int ip reset · winsock reset</code><button type="button" class="btn-copy" aria-label="Copy command: netsh int ip reset · winsock reset" data-copy="netsh int ip reset · winsock reset"><span>Copy</span></button></div></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">02</span><h3>DNS flush &amp; IP renewal</h3></div><p>Purges the local DNS resolver cache, releases expired DHCP addresses, and requests a fresh IP lease.</p><div class="command-row"><code class="command">ipconfig /flushdns · renew</code><button type="button" class="btn-copy" aria-label="Copy command: ipconfig /flushdns · renew" data-copy="ipconfig /flushdns · renew"><span>Copy</span></button></div></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">03</span><h3>Windows Update repair</h3></div><p>Stops Windows Update and BITS services, clears corrupted SoftwareDistribution download files, and restarts services.</p><div class="command-row"><code class="command">wuauserv · BITS · cache cleanup</code><button type="button" class="btn-copy" aria-label="Copy command: wuauserv · BITS · cache cleanup" data-copy="wuauserv · BITS · cache cleanup"><span>Copy</span></button></div></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">04</span><h3>Teams / Outlook cache cleanup</h3></div><p>Safely purges corrupted local application caches for Microsoft Teams, Outlook, and web browsers to address launch crashes.</p><div class="command-row"><code class="command">%localappdata% · app cache</code><button type="button" class="btn-copy" aria-label="Copy command: %localappdata% · app cache" data-copy="%localappdata% · app cache"><span>Copy</span></button></div></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">05</span><h3>Print spooler reset</h3></div><p>Restarts a hung spooler service and clears jammed print jobs locked in the Windows print queue directory.</p><div class="command-row"><code class="command">spooler service · print queue</code><button type="button" class="btn-copy" aria-label="Copy command: spooler service · print queue" data-copy="spooler service · print queue"><span>Copy</span></button></div></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">06</span><h3>System File Checker scan</h3></div><p>Initiates the non-destructive SFC scan to detect and restore corrupted Windows operating system components.</p><div class="command-row"><code class="command">sfc /scannow</code><button type="button" class="btn-copy" aria-label="Copy command: sfc /scannow" data-copy="sfc /scannow"><span>Copy</span></button></div></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">07</span><h3>Temporary files cleanup</h3></div><p>Cleans locked user temporary folders and orphaned installation buffers without targeting personal files.</p><div class="command-row"><code class="command">%temp% · safe cleanup</code><button type="button" class="btn-copy" aria-label="Copy command: %temp% · safe cleanup" data-copy="%temp% · safe cleanup"><span>Copy</span></button></div></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">08</span><h3>Diagnostic system summary</h3></div><p>Generates an exportable text report with active IP status, gateway connectivity, and system uptime for IT escalation.</p><div class="command-row"><code class="command">netsh · systeminfo · report.txt</code><button type="button" class="btn-copy" aria-label="Copy command: netsh · systeminfo · report.txt" data-copy="netsh · systeminfo · report.txt"><span>Copy</span></button></div></article>
         </div>
         <div class="architecture reveal" id="architecture" aria-label="How the utility works">
           <div class="arch-step"><small>STEP 01</small><strong>Launch utility</strong><span>Local Windows Batch file</span></div>
@@ -340,6 +345,7 @@
     </section>
   </main>
   <footer><div class="wrap"><span>© 2026 Vikas Singh · Advanced IT Troubleshooting Utility</span><span>Native Windows Batch · Designed for managed Windows environments</span></div></footer>
+  <div id="copy-status" class="sr-only" role="status" aria-live="polite"></div>
 
   <script>
     (() => {
@@ -387,6 +393,27 @@
         }, { rootMargin: '-25% 0px -65% 0px' });
         sections.forEach(section => sectionObserver.observe(section));
       }
+
+      const copyStatus = document.getElementById('copy-status');
+      document.querySelectorAll('.btn-copy').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const text = btn.getAttribute('data-copy');
+          try {
+            await navigator.clipboard.writeText(text);
+            const label = btn.querySelector('span');
+            label.textContent = '✓ Copied';
+            btn.classList.add('copied');
+            if (copyStatus) copyStatus.textContent = `Copied ${text} to clipboard`;
+            setTimeout(() => {
+              label.textContent = 'Copy';
+              btn.classList.remove('copied');
+              if (copyStatus) copyStatus.textContent = '';
+            }, 2000);
+          } catch (e) {
+            btn.querySelector('span').textContent = 'Failed';
+          }
+        });
+      });
     })();
   </script>
 </body>
