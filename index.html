@@ -1,1043 +1,393 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Case Study: Advanced IT Troubleshooting Utility — Vikas Singh</title>
-  <meta name="description" content="Case Study: Engineering a lightweight (<100 KB) self-service Windows Batch automation tool with 8 one-click fixes, adopted into the BCG custom Windows image and internal IT support suite. By Vikas Singh." />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d17">
+  <meta name="description" content="Advanced IT Troubleshooting Utility — a sub-100 KB native Windows Batch self-service tool with eight one-click fixes, adopted into the BCG custom Windows image. Case study by Vikas Singh.">
+  <title>Advanced IT Troubleshooting Utility — Vikas Singh</title>
   <style>
-    /* === ENTERPRISE DESIGN SYSTEM === */
-    :root, [data-theme="light"] {
-      --color-bg: #f8fafc;
-      --color-surface: #ffffff;
-      --color-surface-2: #f1f5f9;
-      --color-surface-offset: #e2e8f0;
-      --color-divider: #e2e8f0;
-      --color-border: #cbd5e1;
-      --color-text: #0f172a;
-      --color-text-muted: #475569;
-      --color-text-faint: #94a3b8;
-      
-      --color-primary: #0284c7;
-      --color-primary-hover: #0369a1;
-      --color-primary-light: #e0f2fe;
-      --color-accent-teal: #0d9488;
-      --color-accent-emerald: #10b981;
-      --color-accent-amber: #f59e0b;
-      --color-accent-rose: #f43f5e;
-      
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-      --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08);
-      --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.12);
-      
-      --radius-sm: 0.375rem;
-      --radius-md: 0.625rem;
-      --radius-lg: 0.875rem;
-      --radius-xl: 1.25rem;
-      --radius-full: 9999px;
-      
-      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', 'Courier New', monospace;
-      
-      --content-default: 1040px;
-      --content-wide: 1240px;
-      --transition: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    :root {
+      color-scheme: dark;
+      --bg: #080d17; --bg-soft: #0c1422; --surface: #101b2c; --surface-2: #142238;
+      --line: #23334a; --line-strong: #314762; --text: #edf4ff; --muted: #a6b6cc;
+      --subtle: #778ba7; --blue: #55a8ff; --blue-2: #2388f5; --blue-wash: rgba(54,147,255,.12);
+      --green: #53d69a; --green-wash: rgba(53,211,143,.10); --amber: #f3c66c;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --max: 1160px; --radius: 18px; --shadow: 0 22px 70px rgba(0,0,0,.28);
     }
-
-    [data-theme="dark"] {
-      --color-bg: #090d16;
-      --color-surface: #0f172a;
-      --color-surface-2: #1e293b;
-      --color-surface-offset: #182234;
-      --color-divider: #1e293b;
-      --color-border: #334155;
-      --color-text: #f8fafc;
-      --color-text-muted: #94a3b8;
-      --color-text-faint: #64748b;
-      
-      --color-primary: #38bdf8;
-      --color-primary-hover: #7dd3fc;
-      --color-primary-light: rgba(56, 189, 248, 0.12);
-      --color-accent-teal: #2dd4bf;
-      --color-accent-emerald: #34d399;
-      --color-accent-amber: #fbbf24;
-      --color-accent-rose: #fb7185;
-      
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
-      --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.5);
-      --shadow-lg: 0 16px 40px -4px rgba(0, 0, 0, 0.65);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 85px; }
-    body {
-      min-height: 100dvh;
-      font-family: var(--font-body);
-      font-size: 1rem;
-      line-height: 1.6;
-      color: var(--color-text);
-      background: var(--color-bg);
-      transition: background var(--transition), color var(--transition);
-      overflow-x: hidden;
-    }
-    
-    h1, h2, h3, h4 { line-height: 1.25; letter-spacing: -0.025em; font-weight: 700; color: var(--color-text); }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 92px; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 var(--sans); overflow-x: hidden; }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .22; background-image: linear-gradient(rgba(87,135,190,.10) 1px, transparent 1px), linear-gradient(90deg, rgba(87,135,190,.10) 1px, transparent 1px); background-size: 48px 48px; mask-image: linear-gradient(to bottom, black, transparent 82%); }
     a { color: inherit; text-decoration: none; }
-    button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
-    a:focus-visible, button:focus-visible {
-      outline: 2px solid var(--color-primary);
-      outline-offset: 3px;
-      border-radius: var(--radius-sm);
-    }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; border-radius: 8px; }
+    button { font: inherit; }
+    .skip-link { position: absolute; left: 12px; top: -60px; z-index: 2000; padding: 10px 14px; color: #06101d; background: var(--blue); border-radius: 8px; }
+    .skip-link:focus { top: 12px; }
+    .wrap { width: min(var(--max), calc(100% - 48px)); margin-inline: auto; }
+    .mono { font-family: var(--mono); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--blue); font: 700 11px/1.4 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 19px; height: 1px; background: currentColor; }
+    .muted { color: var(--muted); }
+    .section { padding: 100px 0; border-top: 1px solid rgba(49,71,98,.48); }
+    .section-head { max-width: 720px; margin-bottom: 42px; }
+    .section-head h2 { margin: 14px 0 12px; font-size: clamp(30px, 4.2vw, 48px); line-height: 1.12; letter-spacing: -.045em; }
+    .section-head p { margin: 0; max-width: 68ch; color: var(--muted); font-size: 16px; }
+    .topbar { position: sticky; top: 0; z-index: 1000; background: rgba(8,13,23,.88); border-bottom: 1px solid rgba(49,71,98,.7); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+    .nav { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 750; letter-spacing: -.02em; white-space: nowrap; }
+    .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; color: var(--blue); border: 1px solid rgba(85,168,255,.35); border-radius: 10px; background: var(--blue-wash); font: 700 15px var(--mono); }
+    .brand small { display: block; margin-top: -3px; color: var(--subtle); font: 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 25px; list-style: none; margin: 0; padding: 0; }
+    .nav-links a { color: var(--muted); font-size: 12px; font-weight: 650; transition: color .2s; }
+    .nav-links a:hover, .nav-links a[aria-current="location"] { color: var(--blue); }
+    .nav-cta { display: flex; align-items: center; gap: 10px; }
+    .menu-toggle { display: none; width: 42px; height: 42px; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+    .btn { min-height: 46px; display: inline-flex; justify-content: center; align-items: center; gap: 10px; padding: 0 17px; border: 1px solid var(--line-strong); border-radius: 10px; color: var(--text); font-size: 13px; font-weight: 750; transition: transform .2s, border-color .2s, background .2s, box-shadow .2s; }
+    .btn:hover { transform: translateY(-2px); border-color: var(--blue); box-shadow: 0 8px 24px rgba(35,136,245,.14); }
+    .btn-primary { color: #04111f; background: var(--blue); border-color: var(--blue); }
+    .btn-primary:hover { background: #83c0ff; border-color: #83c0ff; }
+    .btn-quiet { background: rgba(255,255,255,.025); }
+    .btn svg { width: 16px; height: 16px; }
 
-    /* === UTILITY NAVIGATION === */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.85rem 2rem;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--color-divider);
-    }
-    [data-theme="light"] nav {
-      background: rgba(255, 255, 255, 0.88);
-    }
-    .nav-brand {
-      display: flex; align-items: center; gap: 0.75rem;
-      font-weight: 700; font-size: 0.95rem;
-    }
-    .nav-tag {
-      font-family: var(--font-mono); font-size: 0.68rem;
-      background: var(--color-primary-light); color: var(--color-primary);
-      padding: 3px 9px; border-radius: var(--radius-full); font-weight: 600;
-      letter-spacing: 0.05em; text-transform: uppercase;
-    }
-    .nav-links {
-      display: flex; align-items: center; gap: 1.75rem; list-style: none;
-    }
-    .nav-links a {
-      font-size: 0.85rem; font-weight: 500; color: var(--color-text-muted);
-      transition: color var(--transition);
-    }
-    .nav-links a:hover { color: var(--color-primary); }
-    .nav-cta {
-      display: flex; align-items: center; gap: 0.75rem;
-    }
-    .theme-toggle-btn {
-      width: 38px; height: 38px; border-radius: var(--radius-md);
-      display: grid; place-items: center; color: var(--color-text-muted);
-      border: 1px solid var(--color-border); background: var(--color-surface);
-      transition: all var(--transition);
-    }
-    .theme-toggle-btn:hover { color: var(--color-text); border-color: var(--color-primary); }
+    /* Hero */
+    .hero { padding: 84px 0 76px; position: relative; }
+    .hero::after { content: ""; position: absolute; width: 460px; height: 460px; right: -160px; top: 8px; border-radius: 50%; background: rgba(32,120,235,.12); filter: blur(90px); pointer-events: none; }
+    .hero-grid { display: grid; grid-template-columns: 1.03fr .97fr; align-items: center; gap: 54px; position: relative; z-index: 1; }
+    .status-row { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 24px; }
+    .pill { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; background: rgba(16,27,44,.72); font: 10px var(--mono); }
+    .pill-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; box-shadow: 0 0 10px rgba(83,214,154,.8); }
+    h1 { max-width: 740px; margin: 0; font-size: clamp(42px, 5.6vw, 68px); line-height: 1.035; letter-spacing: -.065em; }
+    h1 span { color: var(--blue); }
+    .hero-lede { max-width: 620px; margin: 23px 0 27px; color: var(--muted); font-size: clamp(16px, 1.6vw, 18px); line-height: 1.72; }
+    .hero-lede strong { color: var(--text); font-weight: 700; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-bottom: 31px; }
+    .proofline { display: flex; flex-wrap: wrap; gap: 12px 22px; color: var(--subtle); font: 11px var(--mono); }
+    .proofline span { display: inline-flex; align-items: center; gap: 7px; }
+    .proofline b { color: var(--green); font-weight: 700; }
+    .terminal { overflow: hidden; border: 1px solid #2c4564; border-radius: 15px; background: #070c14; box-shadow: 0 30px 90px rgba(0,0,0,.48), 0 0 0 7px rgba(85,168,255,.035); transform: perspective(1100px) rotateY(-3deg) rotateX(1deg); }
+    .terminal-bar { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; background: #101a29; border-bottom: 1px solid #26374c; }
+    .terminal-controls { display: flex; gap: 6px; }
+    .terminal-controls i { width: 8px; height: 8px; display: block; border-radius: 50%; background: #f06b68; }
+    .terminal-controls i:nth-child(2) { background: #e7bd5a; } .terminal-controls i:nth-child(3) { background: #54c98a; }
+    .terminal-title { color: #8da4c0; font: 10px var(--mono); }
+    .terminal-state { color: var(--green); font: 9px var(--mono); letter-spacing: .08em; }
+    .terminal-body { min-height: 340px; padding: 23px 21px 25px; color: #a9bdd4; font: 11px/1.95 var(--mono); }
+    .term-line { white-space: pre-wrap; overflow-wrap: anywhere; }
+    .term-dim { color: #667e9a; } .term-blue { color: #67b5ff; } .term-green { color: #61d99e; } .term-white { color: #e5eef9; } .term-amber { color: #e9c16b; }
+    .cursor { display: inline-block; width: 7px; height: 13px; vertical-align: -2px; background: var(--blue); animation: blink 1s steps(2,start) infinite; }
+    @keyframes blink { to { visibility: hidden; } }
+    .terminal-foot { display: flex; justify-content: space-between; padding: 10px 16px; color: #6e86a3; background: #0c1420; border-top: 1px solid #1e3045; font: 9px var(--mono); }
+    .hero-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 50px; }
+    .metric { padding: 17px 18px; background: linear-gradient(145deg, rgba(16,27,44,.95), rgba(12,20,34,.88)); border: 1px solid var(--line); border-radius: 13px; }
+    .metric strong { display: block; margin-bottom: 4px; color: var(--text); font: 700 clamp(24px,3vw,34px)/1.1 var(--mono); letter-spacing: -.06em; }
+    .metric strong.accent { color: var(--green); }
+    .metric span { color: var(--subtle); font-size: 11px; }
 
-    /* === HERO / CASE STUDY HEADER === */
-    .hero {
-      padding: 8.5rem 1.5rem 3.5rem;
-      max-width: var(--content-wide);
-      margin-inline: auto;
-      position: relative;
-    }
-    .case-badge-bar {
-      display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;
-      margin-bottom: 1.5rem;
-    }
-    .badge {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;
-      padding: 0.35rem 0.85rem; border-radius: var(--radius-full);
-      border: 1px solid var(--color-border); background: var(--color-surface);
-      color: var(--color-text-muted);
-    }
-    .badge-primary {
-      background: var(--color-primary-light);
-      border-color: rgba(56, 189, 248, 0.35);
-      color: var(--color-primary);
-    }
-    .badge-emerald {
-      background: rgba(16, 185, 129, 0.12);
-      border-color: rgba(16, 185, 129, 0.35);
-      color: var(--color-accent-emerald);
-    }
-    .badge-amber {
-      background: rgba(245, 158, 11, 0.12);
-      border-color: rgba(245, 158, 11, 0.35);
-      color: var(--color-accent-amber);
-    }
-    .hero-title {
-      font-size: clamp(2.2rem, 4vw, 3.6rem);
-      letter-spacing: -0.035em;
-      margin-bottom: 1.25rem;
-      max-width: 25ch;
-    }
-    .hero-title span.highlight {
-      background: linear-gradient(135deg, var(--color-primary) 0%, #38bdf8 50%, #818cf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero-subtitle {
-      font-size: 1.15rem; color: var(--color-text-muted);
-      max-width: 70ch; line-height: 1.7; margin-bottom: 2.5rem;
-    }
+    /* Shared cards */
+    .grid-2 { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 13px; }
+    .card { padding: 23px; background: linear-gradient(145deg, rgba(16,27,44,.94), rgba(12,20,34,.94)); border: 1px solid var(--line); border-radius: var(--radius); transition: transform .22s, border-color .22s, box-shadow .22s; }
+    .card:hover { transform: translateY(-4px); border-color: #42658c; box-shadow: var(--shadow); }
+    .card-icon { display: grid; place-items: center; width: 39px; height: 39px; margin-bottom: 17px; color: var(--blue); background: var(--blue-wash); border: 1px solid rgba(85,168,255,.2); border-radius: 11px; font: 700 15px var(--mono); }
+    .card h3 { margin: 0 0 9px; font-size: 16px; letter-spacing: -.02em; }
+    .card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.75; }
+    .card-tag { display: inline-block; margin-top: 17px; color: var(--amber); font: 10px var(--mono); letter-spacing: .04em; text-transform: uppercase; }
 
-    /* === EXECUTIVE METRIC CARDS === */
-    .kpi-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem;
-      margin-bottom: 3.5rem;
-    }
-    .kpi-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      padding: 1.35rem 1.5rem;
-      box-shadow: var(--shadow-sm);
-      position: relative; overflow: hidden;
-      transition: transform var(--transition), border-color var(--transition);
-    }
-    .kpi-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--color-primary);
-    }
-    .kpi-card::before {
-      content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-      background: var(--color-primary);
-    }
-    .kpi-card.emerald::before { background: var(--color-accent-emerald); }
-    .kpi-card.teal::before { background: var(--color-accent-teal); }
-    .kpi-card.amber::before { background: var(--color-accent-amber); }
+    /* Time comparison */
+    .time-panel { margin-top: 28px; padding: 27px; background: linear-gradient(130deg, rgba(21,42,66,.9), rgba(13,23,38,.94)); border: 1px solid #294766; border-radius: var(--radius); }
+    .time-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 24px; }
+    .time-panel-head h3 { margin: 0; font-size: 16px; }
+    .time-panel-head span { color: var(--blue); font: 10px var(--mono); letter-spacing: .08em; }
+    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .compare-col { padding: 20px; background: rgba(4,10,18,.35); border: 1px solid var(--line); border-radius: 12px; }
+    .compare-col.after { border-color: rgba(83,214,154,.42); background: var(--green-wash); }
+    .compare-label { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--muted); font: 11px var(--mono); text-transform: uppercase; }
+    .compare-col.after .compare-label { color: var(--green); }
+    .compare-time { margin-bottom: 12px; font: 700 clamp(30px,4vw,44px)/1 var(--mono); letter-spacing: -.07em; }
+    .compare-col.after .compare-time { color: var(--green); }
+    .compare-col p { margin: 0; color: var(--muted); font-size: 12px; }
+    .bar-track { height: 7px; margin-top: 17px; overflow: hidden; background: #26364a; border-radius: 99px; }
+    .bar-fill { height: 100%; width: 100%; background: #71849b; border-radius: inherit; }
+    .after .bar-fill { width: 2.2%; min-width: 8px; background: var(--green); }
+    .comparison-note { margin: 16px 0 0; color: var(--subtle); font: 10px/1.6 var(--mono); }
 
-    .kpi-value {
-      font-family: var(--font-mono); font-size: 2.25rem; font-weight: 800;
-      line-height: 1.1; margin-bottom: 0.35rem; color: var(--color-text);
-      letter-spacing: -0.04em;
-    }
-    .kpi-label {
-      font-size: 0.88rem; font-weight: 700; color: var(--color-text);
-      margin-bottom: 0.25rem;
-    }
-    .kpi-subtext {
-      font-size: 0.78rem; color: var(--color-text-faint); line-height: 1.45;
-    }
+    /* Fixes */
+    .fixes-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; }
+    .fix-card { position: relative; min-height: 190px; padding: 21px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; transition: .22s ease; }
+    .fix-card:hover { transform: translateY(-3px); border-color: var(--blue); background: #122039; }
+    .fix-top { display: flex; align-items: center; gap: 11px; margin-bottom: 12px; }
+    .fix-number { display: grid; place-items: center; width: 29px; height: 29px; color: var(--blue); background: var(--blue-wash); border: 1px solid rgba(85,168,255,.22); border-radius: 8px; font: 700 11px var(--mono); }
+    .fix-card h3 { margin: 0; font-size: 14px; }
+    .fix-card p { margin: 0 0 14px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .command { display: inline-block; max-width: 100%; padding: 5px 8px; color: #8ec5ff; background: rgba(3,10,19,.55); border: 1px solid #263a54; border-radius: 6px; font: 10px/1.5 var(--mono); overflow-wrap: anywhere; }
+    .architecture { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-top: 28px; }
+    .arch-step { position: relative; padding: 17px 14px; background: rgba(16,27,44,.78); border: 1px solid var(--line); border-radius: 12px; }
+    .arch-step:not(:last-child)::after { content: "→"; position: absolute; top: 50%; right: -13px; z-index: 2; transform: translateY(-50%); color: var(--blue); font: 16px var(--mono); }
+    .arch-step small { display: block; margin-bottom: 7px; color: var(--blue); font: 10px var(--mono); }
+    .arch-step strong { display: block; font-size: 12px; }
+    .arch-step span { display: block; margin-top: 5px; color: var(--subtle); font-size: 10px; }
 
-    /* === SECTIONS GENERAL === */
-    .section-wrap {
-      max-width: var(--content-wide);
-      margin-inline: auto;
-      padding: 3.5rem 1.5rem;
-    }
-    .section-header {
-      margin-bottom: 2.5rem;
-    }
-    .section-step {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700;
-      color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.08em;
-      margin-bottom: 0.5rem;
-    }
-    .section-heading {
-      font-size: clamp(1.6rem, 2.5vw, 2.3rem);
-      margin-bottom: 0.75rem;
-    }
-    .section-desc {
-      color: var(--color-text-muted); font-size: 1rem; max-width: 68ch;
-    }
+    /* Workflow */
+    .timeline { position: relative; display: grid; grid-template-columns: repeat(4,1fr); gap: 13px; }
+    .timeline::before { content: ""; position: absolute; left: 7%; right: 7%; top: 17px; height: 1px; background: linear-gradient(90deg,var(--blue),var(--green)); opacity: .5; }
+    .timeline-item { position: relative; padding: 0 15px 18px; }
+    .timeline-dot { position: relative; z-index: 1; width: 35px; height: 35px; display: grid; place-items: center; margin-bottom: 21px; color: var(--blue); background: #0d1b2c; border: 1px solid #3c6b9b; border-radius: 50%; font: 11px var(--mono); }
+    .timeline-item:last-child .timeline-dot { color: var(--green); border-color: var(--green); }
+    .timeline-item small { color: var(--blue); font: 10px var(--mono); text-transform: uppercase; letter-spacing: .07em; }
+    .timeline-item h3 { margin: 9px 0; font-size: 15px; }
+    .timeline-item p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.75; }
 
-    /* === PILLAR 1: PROBLEM (CHALLENGE) === */
-    .problem-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    /* Impact */
+    .impact-grid .card { min-height: 205px; }
+    .impact-grid .card-icon.green { color: var(--green); background: var(--green-wash); border-color: rgba(83,214,154,.2); }
+    .impact-footnote { margin-top: 18px; color: var(--subtle); font: 10px/1.7 var(--mono); }
+    .about { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 30px; padding: 34px; background: linear-gradient(130deg, #12243b, #0d1727); border: 1px solid #2c4766; border-radius: 20px; }
+    .about-person { display: flex; align-items: flex-start; gap: 19px; }
+    .avatar { flex: 0 0 58px; width: 58px; height: 58px; display: grid; place-items: center; color: var(--blue); background: var(--blue-wash); border: 1px solid rgba(85,168,255,.35); border-radius: 16px; font: 700 19px var(--mono); }
+    .about h2 { margin: 0 0 5px; font-size: 23px; }
+    .about-role { color: var(--blue); font: 10px var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+    .about p { max-width: 690px; margin: 12px 0 0; color: var(--muted); font-size: 13px; }
+    .about-actions { display: flex; flex-direction: column; gap: 9px; min-width: 180px; }
+    footer { padding: 25px 0 35px; color: var(--subtle); border-top: 1px solid var(--line); font: 10px var(--mono); }
+    footer .wrap { display: flex; justify-content: space-between; gap: 12px; }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .65s ease, transform .65s cubic-bezier(.2,.7,.2,1); }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } .reveal { opacity: 1; transform: none; } }
+    @media (max-width: 980px) {
+      .nav-links { gap: 14px; } .nav-links a { font-size: 11px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 35px; } .hero-copy { max-width: 760px; }
+      .terminal { max-width: 700px; transform: none; } .terminal-body { min-height: 280px; }
+      .grid-4 { grid-template-columns: repeat(2,1fr); }
+      .timeline { grid-template-columns: repeat(2,1fr); row-gap: 25px; }
+      .timeline::before { display: none; }
     }
-    .problem-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-xl);
-      padding: 2rem;
-      position: relative;
+    @media (max-width: 700px) {
+      .wrap { width: min(var(--max), calc(100% - 36px)); }
+      .nav { min-height: 64px; } .brand small { display: none; }
+      .menu-toggle { display: grid; place-items: center; }
+      .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; padding: 12px 18px 18px; flex-direction: column; align-items: stretch; gap: 0; background: rgba(8,13,23,.98); border-bottom: 1px solid var(--line); }
+      .nav-links.open { display: flex; }
+      .nav-links a { display: block; padding: 12px 5px; font-size: 13px; }
+      .nav-cta .btn { display: none; }
+      .hero { padding: 58px 0 55px; } h1 { font-size: clamp(40px, 12vw, 57px); }
+      .hero-lede { font-size: 15px; } .hero-metrics { grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 35px; }
+      .metric { padding: 13px 11px; } .metric strong { font-size: clamp(19px,6vw,26px); } .metric span { font-size: 10px; }
+      .terminal-body { min-height: 250px; padding: 17px 14px; font-size: 10px; }
+      .section { padding: 72px 0; } .section-head { margin-bottom: 28px; }
+      .grid-2, .grid-3, .fixes-grid, .compare { grid-template-columns: 1fr; }
+      .grid-4 { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .time-panel { padding: 18px; } .time-panel-head { align-items: flex-start; flex-direction: column; }
+      .architecture { grid-template-columns: 1fr 1fr; gap: 9px; }
+      .arch-step:not(:last-child)::after { display: none; }
+      .timeline { grid-template-columns: 1fr; gap: 19px; }
+      .timeline-item { display: grid; grid-template-columns: 42px 1fr; gap: 0 10px; padding: 0; }
+      .timeline-dot { grid-row: span 3; margin: 0; }
+      .timeline-item small { align-self: center; }
+      .timeline-item h3 { margin: 5px 0 7px; }
+      .about { grid-template-columns: 1fr; padding: 23px; }
+      .about-actions { flex-direction: row; flex-wrap: wrap; }
+      .about-actions .btn { flex: 1 1 145px; }
+      footer .wrap { flex-direction: column; }
     }
-    .problem-icon-wrap {
-      width: 44px; height: 44px; border-radius: var(--radius-md);
-      background: rgba(244, 63, 94, 0.1); color: var(--color-accent-rose);
-      display: grid; place-items: center; margin-bottom: 1.25rem;
-    }
-    .problem-card h3 {
-      font-size: 1.15rem; margin-bottom: 0.75rem;
-    }
-    .problem-card p {
-      color: var(--color-text-muted); font-size: 0.92rem; line-height: 1.65;
-    }
-    .problem-stat-badge {
-      display: inline-block; margin-top: 1.25rem; padding: 0.35rem 0.75rem;
-      background: var(--color-surface-2); border-radius: var(--radius-sm);
-      font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600;
-      color: var(--color-accent-rose); border: 1px solid rgba(244, 63, 94, 0.2);
-    }
-
-    /* === BEFORE vs AFTER TABLE === */
-    .matrix-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      margin-top: 2.25rem;
-      box-shadow: var(--shadow-sm);
-    }
-    .matrix-title {
-      padding: 1.25rem 2rem;
-      background: var(--color-surface-2);
-      border-bottom: 1px solid var(--color-divider);
-      font-size: 0.95rem; font-weight: 700;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .matrix-table {
-      width: 100%; border-collapse: collapse; text-align: left;
-      font-size: 0.9rem;
-    }
-    .matrix-table th {
-      padding: 1rem 1.5rem; font-size: 0.75rem; text-transform: uppercase;
-      font-family: var(--font-mono); color: var(--color-text-faint);
-      border-bottom: 1px solid var(--color-divider); background: var(--color-surface);
-    }
-    .matrix-table td {
-      padding: 1.15rem 1.5rem; border-bottom: 1px solid var(--color-divider);
-      vertical-align: top;
-    }
-    .matrix-table tr:last-child td { border-bottom: none; }
-    .col-before { color: var(--color-accent-rose); font-weight: 500; }
-    .col-after { color: var(--color-accent-emerald); font-weight: 600; }
-
-    /* === PILLAR 2: ACTION & 8 FIXES SHOWCASE === */
-    .action-grid {
-      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 2rem;
-      align-items: start;
-    }
-    .fixes-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
-    }
-    .fix-item {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      padding: 1.1rem;
-      transition: all var(--transition);
-      display: flex; flex-direction: column; gap: 0.4rem;
-    }
-    .fix-item:hover {
-      border-color: var(--color-primary);
-      transform: translateY(-2px);
-    }
-    .fix-header {
-      display: flex; align-items: center; gap: 0.6rem;
-    }
-    .fix-num {
-      width: 24px; height: 24px; border-radius: var(--radius-full);
-      background: var(--color-primary-light); color: var(--color-primary);
-      font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700;
-      display: grid; place-items: center; flex-shrink: 0;
-    }
-    .fix-title {
-      font-size: 0.92rem; font-weight: 700; color: var(--color-text);
-    }
-    .fix-desc {
-      font-size: 0.8rem; color: var(--color-text-muted); line-height: 1.5;
-    }
-    .fix-cmd {
-      font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-primary);
-      background: var(--color-surface-2); padding: 2px 6px; border-radius: var(--radius-sm);
-      display: inline-block; width: fit-content; margin-top: 0.2rem;
-    }
-
-    /* === INTERACTIVE WINDOWS COMMAND PROMPT TERMINAL === */
-    .terminal-box {
-      background: #0c0d12;
-      border: 1px solid #1e293b;
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      box-shadow: var(--shadow-lg);
-      position: sticky; top: 100px;
-    }
-    .terminal-top {
-      padding: 0.65rem 1rem;
-      background: #181d29; border-bottom: 1px solid #232c3d;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .terminal-title-bar {
-      display: flex; align-items: center; gap: 0.5rem;
-      font-family: var(--font-mono); font-size: 0.74rem; color: #cbd5e1;
-    }
-    .win-controls {
-      display: flex; gap: 10px; color: #94a3b8; font-size: 0.8rem;
-    }
-    .terminal-content {
-      padding: 1.35rem 1.5rem;
-      font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.7;
-      color: #e2e8f0; max-height: 520px; overflow-y: auto;
-    }
-    .t-cyan { color: #38bdf8; }
-    .t-green { color: #34d399; }
-    .t-amber { color: #fbbf24; }
-    .t-gray { color: #64748b; }
-    .t-white { color: #ffffff; font-weight: bold; }
-    .t-prompt { color: #f59e0b; }
-
-    /* === PILLAR 3: APPROVAL & ADOPTION WORKFLOW === */
-    .workflow-timeline {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;
-      position: relative; margin-top: 1rem;
-    }
-    .timeline-step {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-xl);
-      padding: 1.75rem 1.5rem;
-      position: relative;
-      display: flex; flex-direction: column; justify-content: space-between;
-      transition: all var(--transition);
-    }
-    .timeline-step:hover {
-      border-color: var(--color-primary);
-      transform: translateY(-3px);
-    }
-    .step-badge {
-      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;
-      color: var(--color-primary); margin-bottom: 0.75rem; text-transform: uppercase;
-    }
-    .timeline-step h4 {
-      font-size: 1.05rem; margin-bottom: 0.6rem;
-    }
-    .timeline-step p {
-      font-size: 0.86rem; color: var(--color-text-muted); line-height: 1.6;
-    }
-    .step-tag {
-      margin-top: 1.25rem; padding: 0.35rem 0.65rem; border-radius: var(--radius-sm);
-      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;
-      background: var(--color-surface-2); color: var(--color-text-muted); width: fit-content;
-    }
-
-    /* === PILLAR 4: BUSINESS BENEFITS (ROI & VALUE) === */
-    .benefits-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-    }
-    .benefit-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-xl);
-      padding: 1.75rem;
-      display: flex; flex-direction: column; justify-content: space-between;
-      transition: all var(--transition);
-    }
-    .benefit-card:hover {
-      box-shadow: var(--shadow-md);
-      border-color: var(--color-primary);
-    }
-    .benefit-header {
-      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;
-    }
-    .benefit-icon {
-      width: 38px; height: 38px; border-radius: var(--radius-md);
-      background: var(--color-surface-2); display: grid; place-items: center;
-      color: var(--color-primary); flex-shrink: 0;
-    }
-    .benefit-card h4 { font-size: 1.05rem; }
-    .benefit-card p { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.6; }
-    .benefit-tag {
-      margin-top: 1.25rem; font-family: var(--font-mono); font-size: 0.72rem;
-      color: var(--color-text-faint); font-weight: 600; text-transform: uppercase;
-    }
-
-    /* === AUTHOR EXECUTIVE PROFILE === */
-    .author-card {
-      background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-2) 100%);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-xl);
-      padding: 2.5rem;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 2rem;
-      box-shadow: var(--shadow-md);
-    }
-    .author-left { display: flex; align-items: center; gap: 1.5rem; }
-    .author-avatar {
-      width: 72px; height: 72px; border-radius: var(--radius-full);
-      background: linear-gradient(135deg, var(--color-primary) 0%, #6366f1 100%);
-      color: #fff; font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700;
-      display: grid; place-items: center; flex-shrink: 0;
-      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
-    }
-    .author-name { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.25rem; }
-    .author-role { font-size: 0.9rem; color: var(--color-primary); font-weight: 600; margin-bottom: 0.5rem; }
-    .author-bio { font-size: 0.85rem; color: var(--color-text-muted); max-width: 58ch; }
-    .author-actions { display: flex; gap: 0.75rem; flex-shrink: 0; }
-    
-    .btn {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.65rem 1.25rem; border-radius: var(--radius-md);
-      font-size: 0.88rem; font-weight: 600; transition: all var(--transition);
-    }
-    .btn-solid {
-      background: var(--color-primary); color: #fff;
-    }
-    .btn-solid:hover {
-      background: var(--color-primary-hover);
-      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
-    }
-    .btn-outline {
-      border: 1px solid var(--color-border); background: var(--color-surface);
-      color: var(--color-text);
-    }
-    .btn-outline:hover {
-      border-color: var(--color-primary); color: var(--color-primary);
-    }
-
-    /* === FOOTER === */
-    footer {
-      padding: 2.5rem 1.5rem;
-      border-top: 1px solid var(--color-divider);
-      text-align: center;
-      font-size: 0.82rem; color: var(--color-text-faint);
-    }
-
-    /* === RESPONSIVE === */
-    @media (max-width: 992px) {
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .problem-grid, .action-grid, .workflow-timeline, .benefits-grid { grid-template-columns: 1fr; }
-      .terminal-box { position: static; }
-      .author-card { flex-direction: column; text-align: center; }
-      .author-left { flex-direction: column; }
-    }
-    @media (max-width: 640px) {
-      nav .nav-links { display: none; }
-      .hero-title { font-size: 2rem; }
-      .fixes-grid { grid-template-columns: 1fr; }
-      .kpi-grid { grid-template-columns: 1fr; }
-      .matrix-table { font-size: 0.8rem; }
-      .matrix-table th, .matrix-table td { padding: 0.75rem 0.85rem; }
-    }
+    @media (max-width: 390px) { .hero-metrics { grid-template-columns: 1fr; } .metric { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; } .metric strong { margin: 0; } .grid-4 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-
-<!-- TOP NAV -->
-<nav>
-  <div class="nav-brand">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-primary);">
-      <polyline points="4 17 10 11 4 5"></polyline>
-      <line x1="12" y1="19" x2="20" y2="19"></line>
-    </svg>
-    <span>Vikas Singh</span>
-    <span class="nav-tag">IT Endpoint Automation</span>
-  </div>
-  <ul class="nav-links">
-    <li><a href="#challenge">1. The Problem</a></li>
-    <li><a href="#engineering">2. What Was Built (8 Fixes)</a></li>
-    <li><a href="#approval">3. Approval &amp; Rollout</a></li>
-    <li><a href="#business-impact">4. Business ROI</a></li>
-  </ul>
-  <div class="nav-cta">
-    <button class="theme-toggle-btn" data-theme-toggle aria-label="Toggle Theme">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
-  </div>
-</nav>
-
-<!-- HERO & EXECUTIVE BRIEF -->
-<header class="hero">
-  <div class="case-badge-bar">
-    <span class="badge badge-primary"><i data-lucide="terminal" style="width:14px;height:14px;"></i> Windows Batch Automation</span>
-    <span class="badge badge-emerald"><i data-lucide="check-circle-2" style="width:14px;height:14px;"></i> 8 One-Click Fixes</span>
-    <span class="badge badge-amber"><i data-lucide="feather" style="width:14px;height:14px;"></i> Under 100 KB Footprint</span>
-    <span class="badge"><i data-lucide="shield-check" style="width:14px;height:14px;"></i> BCG Custom Image Integrated</span>
-    <span class="badge"><i data-lucide="award" style="width:14px;height:14px;"></i> Senior Management Approved</span>
-  </div>
-
-  <h1 class="hero-title">
-    Advanced IT Troubleshooting Utility: <span class="highlight">Self-Service Automation for Enterprise Endpoints</span>
-  </h1>
-
-  <p class="hero-subtitle">
-    Noticed traveling employees frequently losing billable time to routine network, DNS, and Windows Update issues while waiting on IT queues. Engineered an ultra-compact (&lt;100 KB) self-service batch utility with 8 one-click fixes—approved by senior management after a live demo and adopted into the official BCG custom Windows image and internal IT support suite.
-  </p>
-
-  <!-- EXECUTIVE KPI STATS -->
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-value">8</div>
-      <div class="kpi-label">One-Click Fixes</div>
-      <div class="kpi-subtext">Instant automated repair for network, DNS, Windows Update &amp; caches</div>
-    </div>
-    <div class="kpi-card emerald">
-      <div class="kpi-value">&lt; 100 KB</div>
-      <div class="kpi-label">Lightweight Footprint</div>
-      <div class="kpi-subtext">Pure native Windows Batch; zero external dependencies or installs</div>
-    </div>
-    <div class="kpi-card teal">
-      <div class="kpi-value">100%</div>
-      <div class="kpi-label">Self-Service Autonomy</div>
-      <div class="kpi-subtext">Traveling users self-heal issues in 60s without waiting on IT</div>
-    </div>
-    <div class="kpi-card amber">
-      <div class="kpi-value">BCG</div>
-      <div class="kpi-label">Custom Image Adoption</div>
-      <div class="kpi-subtext">Validated by Windows team &amp; packaged into golden OS build</div>
-    </div>
-  </div>
-</header>
-
-<hr style="border:none; border-top:1px solid var(--color-divider); max-width:var(--content-wide); margin:0 auto;">
-
-<!-- 01: THE PROBLEM (CHALLENGE) -->
-<section class="section-wrap" id="challenge">
-  <div class="section-header">
-    <div class="section-step"><i data-lucide="alert-triangle" style="width:15px;height:15px;"></i> Phase 1 — The Problem Statement</div>
-    <h2 class="section-heading">Traveling Users Stranded by Repetitive IT Tickets</h2>
-    <p class="section-desc">
-      Users across business units were raising tickets for the same basic operating system glitches, losing valuable hours waiting for IT support—especially while traveling across client sites, hotels, and airports.
-    </p>
-  </div>
-
-  <div class="problem-grid">
-    <div class="problem-card">
-      <div class="problem-icon-wrap"><i data-lucide="plane-takeoff" style="width:22px;height:22px;"></i></div>
-      <h3>Traveling Staff Stranded Across Time Zones</h3>
-      <p>
-        Consultants and mobile users traveling to client offices or hotels faced recurring network adapter hangs, stale DNS records, and captive portal drops. With IT operating across specific support hours, users lost hours waiting for remote assistance before important client meetings.
-      </p>
-      <div class="problem-stat-badge">Critical Billable Hours Wasted in Transit</div>
-    </div>
-
-    <div class="problem-card">
-      <div class="problem-icon-wrap"><i data-lucide="ticket" style="width:22px;height:22px;"></i></div>
-      <h3>High Ticket Queue for Basic, Identical Glitches</h3>
-      <p>
-        The IT Service Desk was overwhelmed with high-volume repetitive tickets: corrupted Windows Update download caches, hung print spoolers, unresponsive network stacks, and corrupted Teams/Outlook caches that required the exact same basic troubleshooting commands every single time.
-      </p>
-      <div class="problem-stat-badge">30–45 Mins Average Ticket Wait Time</div>
-    </div>
-
-    <div class="problem-card">
-      <div class="problem-icon-wrap"><i data-lucide="clock" style="width:22px;height:22px;"></i></div>
-      <h3>Disproportionate Time Lost for 2-Minute Fixes</h3>
-      <p>
-        While executing a DNS flush or restarting a frozen Windows service takes under 2 minutes of actual command execution, the end-to-end user turnaround took up to 45 minutes due to ticket logging, queuing, remote desktop connection, and technician availability.
-      </p>
-      <div class="problem-stat-badge">Long Resolution Latency for Minor Issues</div>
-    </div>
-
-    <div class="problem-card">
-      <div class="problem-icon-wrap"><i data-lucide="shield-alert" style="width:22px;height:22px;"></i></div>
-      <h3>Lack of Safe Self-Service Tooling for Non-Tech Users</h3>
-      <p>
-        End users could not safely resolve issues themselves. Running manual commands like <code style="font-family:var(--font-mono);font-size:0.75rem;">netsh int ip reset</code> or clearing <code style="font-family:var(--font-mono);font-size:0.75rem;">SoftwareDistribution</code> manually required command-line knowledge and elevated privileges, posing risks of accidental misconfiguration.
-      </p>
-      <div class="problem-stat-badge">Zero Safe One-Click Options Available</div>
-    </div>
-  </div>
-
-  <!-- BEFORE vs AFTER COMPARISON -->
-  <div class="matrix-card">
-    <div class="matrix-title">
-      <span>Operational Benchmark: Before vs. After Implementation</span>
-      <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--color-primary);">ENTERPRISE MEASURED IMPACT</span>
-    </div>
-    <table class="matrix-table">
-      <thead>
-        <tr>
-          <th>Operational Metric</th>
-          <th>Before (Manual Support Queue)</th>
-          <th>After (Advanced Troubleshooting Utility)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Resolution Workflow</strong></td>
-          <td class="col-before">Log IT ticket → wait in queue → remote screen share → technician manual commands</td>
-          <td class="col-after">Open utility → select 1 of 8 fixes → automated remediation completes in &lt;60s</td>
-        </tr>
-        <tr>
-          <td><strong>Support for Traveling Users</strong></td>
-          <td class="col-before">Completely stranded if offline or outside IT service desk operating hours</td>
-          <td class="col-after">100% self-service execution on the laptop; zero internet dependency to run fixes</td>
-        </tr>
-        <tr>
-          <td><strong>Average User Wait Time</strong></td>
-          <td class="col-before">30 to 45 minutes of lost productivity per incident</td>
-          <td class="col-after">Instant self-service resolution in under 1 minute</td>
-        </tr>
-        <tr>
-          <td><strong>Footprint &amp; Complexity</strong></td>
-          <td class="col-before">Heavy third-party agents or multiple scattered troubleshooting scripts</td>
-          <td class="col-after">Ultra-lightweight (&lt;100 KB) native Windows Batch script; zero installation</td>
-        </tr>
-        <tr>
-          <td><strong>Fleet Standardization</strong></td>
-          <td class="col-before">Individual technicians ran inconsistent, ad-hoc terminal commands</td>
-          <td class="col-after">Standardized in BCG Custom Windows Image and internal IT tool for entire organization</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<hr style="border:none; border-top:1px solid var(--color-divider); max-width:var(--content-wide); margin:0 auto;">
-
-<!-- 02: WHAT WAS DONE (ENGINEERING & 8 ONE-CLICK FIXES) -->
-<section class="section-wrap" id="engineering">
-  <div class="section-header">
-    <div class="section-step"><i data-lucide="code" style="width:15px;height:15px;"></i> Phase 2 — Engineering &amp; Architecture</div>
-    <h2 class="section-heading">Building the &lt;100 KB Self-Service Batch Utility</h2>
-    <p class="section-desc">
-      Architected a standalone, menu-driven Windows Batch utility designed specifically for non-technical employees and internal L1 technicians, packaging the top 8 diagnostic and recovery procedures into instant one-click actions.
-    </p>
-  </div>
-
-  <div class="action-grid">
-    <div>
-      <div class="fixes-grid">
-        <!-- Fix 1 -->
-        <div class="fix-item">
-          <div class="fix-header">
-            <span class="fix-num">1</span>
-            <span class="fix-title">Complete Network Reset</span>
-          </div>
-          <p class="fix-desc">Resets the TCP/IP stack and Winsock catalog back to clean default states after hotel or captive Wi-Fi lockups.</p>
-          <span class="fix-cmd">netsh int ip reset &amp; winsock reset</span>
-        </div>
-
-        <!-- Fix 2 -->
-        <div class="fix-item">
-          <div class="fix-header">
-            <span class="fix-num">2</span>
-            <span class="fix-title">DNS Flush &amp; IP Renewal</span>
-          </div>
-          <p class="fix-desc">Purges corrupted local DNS resolver cache, releases expired DHCP addresses, and queries a fresh IP lease.</p>
-          <span class="fix-cmd">ipconfig /flushdns /renew</span>
-        </div>
-
-        <!-- Fix 3 -->
-        <div class="fix-item">
-          <div class="fix-header">
-            <span class="fix-num">3</span>
-            <span class="fix-title">Windows Update Repair</span>
-          </div>
-          <p class="fix-desc">Stops wuauserv &amp; BITS, purges corrupted SoftwareDistribution download files, and cleanly restarts daemons.</p>
-          <span class="fix-cmd">net stop wuauserv &amp; del cache</span>
-        </div>
-
-        <!-- Fix 4 -->
-        <div class="fix-item">
-          <div class="fix-header">
-            <span class="fix-num">4</span>
-            <span class="fix-title">Enterprise App Cache Flush</span>
-          </div>
-          <p class="fix-desc">Safely purges corrupted local app caches for Microsoft Teams, Outlook, and web browsers to fix launch crashes.</p>
-          <span class="fix-cmd">rd /s /q %localappdata%\Microsoft\Teams</span>
-        </div>
-
-        <!-- Fix 5 -->
-        <div class="fix-item">
-          <div class="fix-header">
-            <span class="fix-num">5</span>
-            <span class="fix-title">Print Spooler Reset</span>
-          </div>
-          <p class="fix-desc">Restarts hung spoolsv service and clears jammed print jobs locked in the Windows print queue directory.</p>
-          <span class="fix-cmd">net stop spooler &amp; del *.shd</span>
-        </div>
-
-        <!-- Fix 6 -->
-        <div class="fix-item">
-          <div class="fix-header">
-            <span class="fix-num">6</span>
-            <span class="fix-title">System File Integrity Scan</span>
-          </div>
-          <p class="fix-desc">Initiates automated, non-destructive System File Checker to detect and restore corrupted Windows OS components.</p>
-          <span class="fix-cmd">sfc /scannow</span>
-        </div>
-
-        <!-- Fix 7 -->
-        <div class="fix-item">
-          <div class="fix-header">
-            <span class="fix-num">7</span>
-            <span class="fix-title">Temp Files &amp; Disk Cleanup</span>
-          </div>
-          <p class="fix-desc">Cleans locked user temp folders and orphaned installation buffers without deleting personal files.</p>
-          <span class="fix-cmd">del /f /s /q %temp%\*</span>
-        </div>
-
-        <!-- Fix 8 -->
-        <div class="fix-item">
-          <div class="fix-header">
-            <span class="fix-num">8</span>
-            <span class="fix-title">Diagnostic System Summary</span>
-          </div>
-          <p class="fix-desc">Generates an instant, exportable text report with active IP status, gateway connectivity, and uptime for IT escalations.</p>
-          <span class="fix-cmd">netsh &amp; systeminfo &gt; report.txt</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- TERMINAL DEMO: COMMAND PROMPT STYLE -->
-    <div class="terminal-box">
-      <div class="terminal-top">
-        <div class="terminal-title-bar">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <polyline points="4 17 10 11 4 5"></polyline>
-            <line x1="12" y1="19" x2="20" y2="19"></line>
-          </svg>
-          <span>Command Prompt - IT-Troubleshoot.bat [Admin]</span>
-        </div>
-        <div class="win-controls">
-          <span>─</span>
-          <span>□</span>
-          <span>✕</span>
-        </div>
-      </div>
-      <div class="terminal-content">
-        <div class="t-cyan">===============================================================</div>
-        <div class="t-white"> BCG IT SUPPORT -- ADVANCED TROUBLESHOOTING UTILITY (v2.4)</div>
-        <div class="t-gray"> Footprint: 84 KB | Native Batch | Endpoint Self-Service</div>
-        <div class="t-cyan">===============================================================</div>
-        <br>
-        <div> [1] Complete Network Reset (TCP/IP &amp; Winsock Reset)</div>
-        <div> [2] DNS Flush &amp; IP Lease Release/Renew</div>
-        <div> [3] Windows Update Service &amp; Cache Repair</div>
-        <div> [4] Flush Teams / Outlook / Office App Caches</div>
-        <div> [5] Restart Print Spooler &amp; Purge Stuck Print Queues</div>
-        <div> [6] System File Checker Integrity Scan (SFC)</div>
-        <div> [7] Clean User &amp; System Temporary Files</div>
-        <div> [8] Generate Network &amp; Hardware Diagnostic Report</div>
-        <div> [Q] Quit Utility</div>
-        <br>
-        <div class="t-cyan">---------------------------------------------------------------</div>
-        <div><span class="t-prompt">Select an option [1-8, Q]:</span> 2</div>
-        <div class="t-cyan">---------------------------------------------------------------</div>
-        <br>
-        <div class="t-gray">[1/3] Flushing Windows DNS Resolver Cache...</div>
-        <div class="t-green">  ✔ Successfully flushed the DNS Resolver Cache.</div>
-        <div class="t-gray">[2/3] Releasing and renewing DHCP IPv4/IPv6 leases...</div>
-        <div class="t-green">  ✔ Adapter "Wi-Fi" leased new IP: 10.142.28.109</div>
-        <div class="t-gray">[3/3] Re-registering DNS connection with domain controller...</div>
-        <div class="t-green">  ✔ Registration of DNS records initiated successfully.</div>
-        <br>
-        <div class="t-amber">===============================================================</div>
-        <div class="t-white"> [SUCCESS] Network and DNS resolution restored in 14 seconds!</div>
-        <div class="t-amber">===============================================================</div>
-        <div class="t-gray">Press any key to return to main menu...</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr style="border:none; border-top:1px solid var(--color-divider); max-width:var(--content-wide); margin:0 auto;">
-
-<!-- 03: MANAGEMENT APPROVAL & ENTERPRISE ADOPTION -->
-<section class="section-wrap" id="approval">
-  <div class="section-header">
-    <div class="section-step"><i data-lucide="check-check" style="width:15px;height:15px;"></i> Phase 3 — Executive Approval &amp; Rollout</div>
-    <h2 class="section-heading">From Prototype to Enterprise Standard</h2>
-    <p class="section-desc">
-      How proactive engineering turned a lightweight script into a company-wide corporate standard deployed across the BCG endpoint infrastructure.
-    </p>
-  </div>
-
-  <div class="workflow-timeline">
-    <div class="timeline-step">
-      <div>
-        <div class="step-badge">Step 01 · Proactive Build</div>
-        <h4>Identified User Friction</h4>
-        <p>Observed continuous ticket patterns of traveling consultants losing hours to basic connectivity and update freezes. Engineered the &lt;100 KB utility independently to solve real user pain points.</p>
-      </div>
-      <div class="step-tag">Initial Prototype</div>
-    </div>
-
-    <div class="timeline-step">
-      <div>
-        <div class="step-badge">Step 02 · Live Pitch</div>
-        <h4>Executive Demo</h4>
-        <p>Conducted a live demonstration for direct IT manager and senior management, showing how an employee can resolve a 45-minute support ticket in 30 seconds with a single click.</p>
-      </div>
-      <div class="step-tag">Leadership Presentation</div>
-    </div>
-
-    <div class="timeline-step">
-      <div>
-        <div class="step-badge">Step 03 · Management Sign-Off</div>
-        <h4>Formal Approval</h4>
-        <p>Received unanimous approval and accolades from leadership for creating a zero-cost, high-impact self-service tool that directly reduces support ticket volumes.</p>
-      </div>
-      <div class="step-tag">Executive Approval</div>
-    </div>
-
-    <div class="timeline-step">
-      <div>
-        <div class="step-badge">Step 04 · Fleet Rollout</div>
-        <h4>BCG Custom Image Integration</h4>
-        <p>The enterprise Windows team reviewed code safety, approved production standards, and embedded the tool directly into the official BCG custom Windows image and the internal IT toolkit.</p>
-      </div>
-      <div class="step-tag">Golden Image Deployed</div>
-    </div>
-  </div>
-</section>
-
-<hr style="border:none; border-top:1px solid var(--color-divider); max-width:var(--content-wide); margin:0 auto;">
-
-<!-- 04: BUSINESS BENEFITS & STRATEGIC VALUE -->
-<section class="section-wrap" id="business-impact">
-  <div class="section-header">
-    <div class="section-step"><i data-lucide="trending-up" style="width:15px;height:15px;"></i> Phase 4 — Strategic Business Value</div>
-    <h2 class="section-heading">Executive &amp; Operational Impact</h2>
-    <p class="section-desc">
-      Measurable return on investment across employee productivity, support efficiency, and enterprise endpoint reliability.
-    </p>
-  </div>
-
-  <div class="benefits-grid">
-    <div class="benefit-card">
-      <div>
-        <div class="benefit-header">
-          <div class="benefit-icon"><i data-lucide="globe"></i></div>
-          <h4>Continuous Mobile Productivity</h4>
-        </div>
-        <p>
-          Consultants working internationally or at client offices can self-heal connectivity drops and update hangs in seconds, preventing missed meetings and preserving billable hours.
-        </p>
-      </div>
-      <div class="benefit-tag">Traveling Workforce</div>
-    </div>
-
-    <div class="benefit-card">
-      <div>
-        <div class="benefit-header">
-          <div class="benefit-icon"><i data-lucide="inbox"></i></div>
-          <h4>Massive Ticket Queue Deflection</h4>
-        </div>
-        <p>
-          Eliminated high-volume, low-complexity L1 tickets for basic DNS, network, and update issues, liberating IT engineers to focus on high-priority infrastructure and security incidents.
-        </p>
-      </div>
-      <div class="benefit-tag">Service Desk Capacity</div>
-    </div>
-
-    <div class="benefit-card">
-      <div>
-        <div class="benefit-header">
-          <div class="benefit-icon"><i data-lucide="dollar-sign"></i></div>
-          <h4>Zero Licensing &amp; Infrastructure Cost</h4>
-        </div>
-        <p>
-          Built entirely on native Windows Batch scripting (&lt;100 KB footprint), delivering an enterprise self-healing solution with zero software licenses, agent overhead, or recurring fees.
-        </p>
-      </div>
-      <div class="benefit-tag">Cost Efficiency</div>
-    </div>
-
-    <div class="benefit-card">
-      <div>
-        <div class="benefit-header">
-          <div class="benefit-icon"><i data-lucide="layers"></i></div>
-          <h4>BCG Gold Master Integration</h4>
-        </div>
-        <p>
-          Incorporated into the BCG custom Windows image (Standard Operating Environment), guaranteeing every newly provisioned laptop is equipped with self-service capabilities on day one.
-        </p>
-      </div>
-      <div class="benefit-tag">Fleet Standardization</div>
-    </div>
-
-    <div class="benefit-card">
-      <div>
-        <div class="benefit-header">
-          <div class="benefit-icon"><i data-lucide="user-check"></i></div>
-          <h4>Internal IT Toolkit Standardization</h4>
-        </div>
-        <p>
-          Service Desk analysts use the exact same standardized utility during remote troubleshooting calls, establishing deterministic, error-free repair procedures across the global team.
-        </p>
-      </div>
-      <div class="benefit-tag">Operational Consistency</div>
-    </div>
-
-    <div class="benefit-card">
-      <div>
-        <div class="benefit-header">
-          <div class="benefit-icon"><i data-lucide="shield-check"></i></div>
-          <h4>Safe &amp; Guarded Execution</h4>
-        </div>
-        <p>
-          Built-in administrator privilege checks, confirmation safeguards, and non-destructive service cleanups protect systems from user error while restoring system health reliably.
-        </p>
-      </div>
-      <div class="benefit-tag">Security &amp; Safety</div>
-    </div>
-  </div>
-</section>
-
-<!-- AUTHOR / EXECUTIVE PROFILE -->
-<section class="section-wrap">
-  <div class="author-card">
-    <div class="author-left">
-      <div class="author-avatar">VS</div>
-      <div>
-        <h3 class="author-name">Vikas Singh</h3>
-        <div class="author-role">System Analyst · Endpoint Automation &amp; Infrastructure Operations</div>
-        <p class="author-bio">
-          Specializing in enterprise endpoint automation, Windows OS customization, self-service support architecture, and fleet-wide operational efficiency. Initiated and engineered the Advanced Troubleshooting Utility adopted across corporate Windows builds.
-        </p>
-      </div>
-    </div>
-    <div class="author-actions">
-      <a href="https://github.com/Vikas3333-singh" target="_blank" rel="noopener noreferrer" class="btn btn-solid">
-        <i data-lucide="github" style="width:16px;height:16px;"></i> View GitHub
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="Vikas Singh — back to top">
+        <span class="brand-mark">VS</span><span>Vikas Singh<small>Endpoint automation</small></span>
       </a>
-      <a href="https://www.linkedin.com/in/vikas-singh" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
-        <i data-lucide="linkedin" style="width:16px;height:16px;"></i> LinkedIn Profile
-      </a>
-    </div>
-  </div>
-</section>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#challenge">Challenge</a></li><li><a href="#solution">Solution</a></li><li><a href="#architecture">Architecture</a></li><li><a href="#rollout">Rollout</a></li><li><a href="#impact">Impact</a></li>
+      </ul>
+      <div class="nav-cta"><a class="btn btn-quiet" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">View project <span aria-hidden="true">↗</span></a></div>
+    </nav>
+  </header>
 
-<!-- FOOTER -->
-<footer>
-  <p>© 2025 Vikas Singh · Advanced IT Troubleshooting Utility Case Study · BCG Custom Windows Image Integrated</p>
-</footer>
+  <main id="main">
+    <section class="hero wrap" id="top" aria-labelledby="hero-title">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="status-row"><span class="pill"><i class="pill-dot"></i> ENTERPRISE CASE STUDY</span><span class="pill">WINDOWS BATCH AUTOMATION</span><span class="pill">BCG IMAGE INTEGRATED</span></div>
+          <div class="eyebrow">Self-service endpoint engineering</div>
+          <h1 id="hero-title">45-minute IT ticket.<br><span>60-second fix.</span></h1>
+          <p class="hero-lede">An enterprise Windows Batch utility that turns recurring endpoint issues into <strong>safe, one-click self-service repairs</strong>—without installing agents or relying on external dependencies. Built by Vikas Singh and adopted into the BCG custom Windows image.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">View GitHub repository <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-quiet" href="#solution">Explore the build <span aria-hidden="true">↓</span></a>
+          </div>
+          <div class="proofline"><span><b>✓</b> Senior management approved</span><span><b>✓</b> BCG custom image adoption</span><span><b>✓</b> Native Windows utility</span></div>
+        </div>
+        <div class="terminal" aria-label="Decorative terminal preview showing a successful network and DNS repair" role="img">
+          <div class="terminal-bar"><div class="terminal-controls" aria-hidden="true"><i></i><i></i><i></i></div><span class="terminal-title">AITU.exe — Windows Command Prompt</span><span class="terminal-state">● READY</span></div>
+          <div class="terminal-body" aria-hidden="true">
+            <div class="term-line term-dim">Microsoft Windows [Version 10.0.22631]</div>
+            <div class="term-line term-dim">(c) Microsoft Corporation. All rights reserved.</div><br>
+            <div class="term-line term-blue">C:\\Users\\Employee&gt; AITU.bat</div>
+            <div class="term-line term-white">Advanced IT Troubleshooting Utility <span class="term-dim">v1.0</span></div>
+            <div class="term-line term-dim">────────────────────────────────────────────</div>
+            <div class="term-line term-green">[1] Network &amp; DNS repair selected</div>
+            <div class="term-line term-dim">[1/3] Flushing DNS resolver cache...</div>
+            <div class="term-line term-green">  ✓ DNS cache flushed successfully</div>
+            <div class="term-line term-dim">[2/3] Renewing network configuration...</div>
+            <div class="term-line term-green">  ✓ Network lease renewal requested</div>
+            <div class="term-line term-dim">[3/3] Completing diagnostics...</div>
+            <div class="term-line term-green">  ✓ Repair sequence completed</div><br>
+            <div class="term-line term-amber">────────────────────────────────────────────</div>
+            <div class="term-line term-white">[SUCCESS] Self-service action complete.</div>
+            <div class="term-line term-dim">Returning to main menu...</div>
+            <div class="term-line term-blue">C:\\Users\\Employee&gt; <span class="cursor"></span></div>
+          </div>
+          <div class="terminal-foot"><span>LOCAL EXECUTION · NO AGENT REQUIRED</span><span>100 KB CLASS</span></div>
+        </div>
+      </div>
+      <div class="hero-metrics" aria-label="Project highlights">
+        <div class="metric"><strong>8</strong><span>one-click fixes</span></div>
+        <div class="metric"><strong class="accent">&lt;100 KB</strong><span>native Batch footprint</span></div>
+        <div class="metric"><strong class="accent">&lt;1 min</strong><span>self-service resolution</span></div>
+      </div>
+    </section>
 
-<script>
-  // Theme Toggle Functionality
-  (function(){
-    const btn = document.querySelector('[data-theme-toggle]');
-    const root = document.documentElement;
-    let currentTheme = localStorage.getItem('theme') || 'dark';
-    root.setAttribute('data-theme', currentTheme);
+    <section class="section" id="challenge">
+      <div class="wrap">
+        <div class="section-head reveal"><div class="eyebrow">01 / The challenge</div><h2>Small endpoint issues.<br>Enterprise-sized delays.</h2><p>Traveling consultants and mobile employees repeatedly lost productive time to routine Windows problems. The fixes were simple; the support workflow was not.</p></div>
+        <div class="grid-2">
+          <article class="card reveal"><div class="card-icon">01</div><h3>Travel across time zones</h3><p>Consultants traveling to client offices, hotels, and airports encountered network adapter hangs, stale DNS records, and captive portal drops. When IT support was outside operating hours, users could be stranded before important client meetings.</p><span class="card-tag">Mobile workforce friction</span></article>
+          <article class="card reveal"><div class="card-icon">02</div><h3>Repetitive service desk tickets</h3><p>The Service Desk repeatedly handled corrupted Windows Update caches, hung print spoolers, unresponsive network stacks, and Teams/Outlook cache issues—often requiring the same basic commands each time.</p><span class="card-tag">Low-complexity ticket volume</span></article>
+          <article class="card reveal"><div class="card-icon">03</div><h3>Queue time outweighed repair time</h3><p>A DNS flush or Windows service restart could take under two minutes to execute. End-to-end turnaround stretched to 30–45 minutes once ticket logging, queueing, remote sessions, and technician availability were factored in.</p><span class="card-tag">30–45 min average wait</span></article>
+          <article class="card reveal"><div class="card-icon">04</div><h3>No safe self-service path</h3><p>Non-technical employees could not safely run commands such as <code class="command">netsh int ip reset</code> or clear <code class="command">SoftwareDistribution</code>. Manual command-line work required technical knowledge and elevated privileges, increasing misconfiguration risk.</p><span class="card-tag">No guided one-click option</span></article>
+        </div>
+        <div class="time-panel reveal" aria-labelledby="time-title">
+          <div class="time-panel-head"><h3 id="time-title">Resolution experience · Before vs. after</h3><span>THE CORE OUTCOME</span></div>
+          <div class="compare">
+            <div class="compare-col"><div class="compare-label">Before · manual support queue</div><div class="compare-time">30–45 min</div><p>Log ticket → wait in queue → remote screen share → technician runs commands.</p><div class="bar-track"><div class="bar-fill"></div></div></div>
+            <div class="compare-col after"><div class="compare-label">After · self-service utility</div><div class="compare-time">&lt;60 sec</div><p>Open utility → select one of eight fixes → automated repair sequence runs locally.</p><div class="bar-track"><div class="bar-fill"></div></div></div>
+          </div>
+          <p class="comparison-note">The 30–45 minute figure describes the previous end-to-end support wait; the under-60-second figure describes the self-service repair experience described in the project brief.</p>
+        </div>
+      </div>
+    </section>
 
-    function renderThemeIcon(){
-      if(!btn) return;
-      const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      btn.setAttribute('aria-label', `Switch to ${targetTheme} theme`);
-      btn.setAttribute('title', `Switch to ${targetTheme} theme`);
-      btn.innerHTML = currentTheme === 'dark'
-        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
-        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-    }
-    renderThemeIcon();
+    <section class="section" id="solution">
+      <div class="wrap">
+        <div class="section-head reveal"><div class="eyebrow">02 / The solution</div><h2>Eight fixes. One lightweight utility.</h2><p>A standalone, menu-driven Windows Batch utility for non-technical employees and internal L1 technicians. It packages common diagnostic and recovery procedures into guided, one-click actions.</p></div>
+        <div class="fixes-grid">
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">01</span><h3>Complete network reset</h3></div><p>Resets the TCP/IP stack and Winsock catalog to clean default states after hotel or captive Wi-Fi lockups.</p><code class="command">netsh int ip reset · winsock reset</code></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">02</span><h3>DNS flush &amp; IP renewal</h3></div><p>Purges the local DNS resolver cache, releases expired DHCP addresses, and requests a fresh IP lease.</p><code class="command">ipconfig /flushdns · renew</code></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">03</span><h3>Windows Update repair</h3></div><p>Stops Windows Update and BITS services, clears corrupted SoftwareDistribution download files, and restarts services.</p><code class="command">wuauserv · BITS · cache cleanup</code></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">04</span><h3>Teams / Outlook cache cleanup</h3></div><p>Safely purges corrupted local application caches for Microsoft Teams, Outlook, and web browsers to address launch crashes.</p><code class="command">%localappdata% · app cache</code></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">05</span><h3>Print spooler reset</h3></div><p>Restarts a hung spooler service and clears jammed print jobs locked in the Windows print queue directory.</p><code class="command">spooler service · print queue</code></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">06</span><h3>System File Checker scan</h3></div><p>Initiates the non-destructive SFC scan to detect and restore corrupted Windows operating system components.</p><code class="command">sfc /scannow</code></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">07</span><h3>Temporary files cleanup</h3></div><p>Cleans locked user temporary folders and orphaned installation buffers without targeting personal files.</p><code class="command">%temp% · safe cleanup</code></article>
+          <article class="fix-card reveal"><div class="fix-top"><span class="fix-number">08</span><h3>Diagnostic system summary</h3></div><p>Generates an exportable text report with active IP status, gateway connectivity, and system uptime for IT escalation.</p><code class="command">netsh · systeminfo · report.txt</code></article>
+        </div>
+        <div class="architecture reveal" id="architecture" aria-label="How the utility works">
+          <div class="arch-step"><small>STEP 01</small><strong>Launch utility</strong><span>Local Windows Batch file</span></div>
+          <div class="arch-step"><small>STEP 02</small><strong>Choose a fix</strong><span>Guided menu selection</span></div>
+          <div class="arch-step"><small>STEP 03</small><strong>Run guarded action</strong><span>Privilege checks &amp; safeguards</span></div>
+          <div class="arch-step"><small>STEP 04</small><strong>Restore / report</strong><span>Local result or diagnostic output</span></div>
+        </div>
+        <p class="impact-footnote reveal">Implementation notes from the original case study: native Windows Batch; under 100 KB; no external dependencies or installation; administrator privilege checks, confirmation safeguards, and non-destructive service cleanups. Fixes execute locally and do not require an internet connection to run.</p>
+      </div>
+    </section>
 
-    btn && btn.addEventListener('click', () => {
-      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', currentTheme);
-      localStorage.setItem('theme', currentTheme);
-      renderThemeIcon();
-    });
-  })();
+    <section class="section" id="rollout">
+      <div class="wrap">
+        <div class="section-head reveal"><div class="eyebrow">03 / Approval &amp; rollout</div><h2>From a practical prototype<br>to an enterprise standard.</h2><p>The project moved from an observed support problem to a reviewed and adopted endpoint utility through a clear management and Windows-team rollout path.</p></div>
+        <div class="timeline">
+          <article class="timeline-item reveal"><div class="timeline-dot">01</div><small>Proactive build</small><h3>Identified user friction</h3><p>Observed recurring ticket patterns among traveling consultants facing connectivity and update freezes. Independently engineered the lightweight utility to address those user pain points.</p></article>
+          <article class="timeline-item reveal"><div class="timeline-dot">02</div><small>Live presentation</small><h3>Executive demo</h3><p>Demonstrated the workflow to the IT manager and senior management, showing how a user could resolve a 45-minute support issue with a single click. The original page describes the demo repair as taking 30 seconds.</p></article>
+          <article class="timeline-item reveal"><div class="timeline-dot">03</div><small>Management sign-off</small><h3>Formal approval</h3><p>Received senior-management approval and positive recognition for a zero-cost self-service tool designed to reduce repetitive support demand.</p></article>
+          <article class="timeline-item reveal"><div class="timeline-dot">04</div><small>Fleet rollout</small><h3>BCG image integration</h3><p>The enterprise Windows team reviewed code safety and production standards, then embedded the utility into the official BCG custom Windows image and internal IT toolkit.</p></article>
+        </div>
+      </div>
+    </section>
 
-  // Render Lucide Icons
-  document.addEventListener('DOMContentLoaded', () => {
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
-    }
-  });
-</script>
+    <section class="section" id="impact">
+      <div class="wrap">
+        <div class="section-head reveal"><div class="eyebrow">04 / Business impact</div><h2>Less waiting for employees.<br>More capacity for IT.</h2><p>The value extends beyond a faster fix: it improves mobile productivity, standardizes routine remediation, and reduces dependence on paid agents or additional infrastructure.</p></div>
+        <div class="grid-3 impact-grid">
+          <article class="card reveal"><div class="card-icon green">↗</div><h3>Continuous mobile productivity</h3><p>Consultants at client offices or traveling internationally can self-resolve connectivity drops and update hangs, helping prevent missed meetings and preserve billable time.</p><span class="card-tag">Traveling workforce</span></article>
+          <article class="card reveal"><div class="card-icon green">↓</div><h3>Ticket queue deflection</h3><p>Designed to deflect high-volume, low-complexity L1 tickets for DNS, network, and update issues, freeing IT engineers to focus on higher-priority infrastructure and security incidents.</p><span class="card-tag">Service desk capacity</span></article>
+          <article class="card reveal"><div class="card-icon green">$0</div><h3>Zero licensing overhead</h3><p>Built entirely on native Windows Batch with an under-100 KB footprint—no software licenses, third-party agent overhead, or recurring infrastructure fees.</p><span class="card-tag">Cost efficiency</span></article>
+          <article class="card reveal"><div class="card-icon">OS</div><h3>BCG gold image integration</h3><p>Included in the BCG custom Windows image / Standard Operating Environment so newly provisioned laptops have the self-service capability available from day one.</p><span class="card-tag">Fleet standardization</span></article>
+          <article class="card reveal"><div class="card-icon">IT</div><h3>One standardized IT workflow</h3><p>Service Desk analysts can use the same utility during remote troubleshooting, creating consistent repair procedures across the support team.</p><span class="card-tag">Operational consistency</span></article>
+          <article class="card reveal"><div class="card-icon">✓</div><h3>Guarded execution</h3><p>Administrator privilege checks, confirmation safeguards, and non-destructive service cleanups help protect systems from user error while restoring system health.</p><span class="card-tag">Security &amp; safety</span></article>
+        </div>
+        <p class="impact-footnote reveal">The original case study characterizes the result as 100% self-service autonomy for supported fixes and reports ticket-queue deflection as a business objective. No organization-wide ticket-deflection percentage or monetary savings figure is asserted here because the source page does not provide a measured total.</p>
+      </div>
+    </section>
 
+    <section class="section" id="about">
+      <div class="wrap">
+        <div class="about reveal">
+          <div class="about-person"><div class="avatar" aria-hidden="true">VS</div><div><h2>Vikas Singh</h2><div class="about-role">System Analyst · Endpoint Automation &amp; Infrastructure Operations</div><p>Specializing in enterprise endpoint automation, Windows OS customization, self-service support architecture, and fleet-wide operational efficiency. Initiated and engineered the Advanced IT Troubleshooting Utility adopted across corporate Windows builds.</p></div></div>
+          <div class="about-actions">
+            <a class="btn btn-primary" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">View project on GitHub ↗</a>
+            <a class="btn btn-quiet" href="https://www.linkedin.com/in/vikas-singh" target="_blank" rel="noopener noreferrer">LinkedIn profile ↗</a>
+            <a class="btn btn-quiet" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">Project files / README ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap"><span>© 2026 Vikas Singh · Advanced IT Troubleshooting Utility</span><span>Native Windows Batch · BCG custom image integrated</span></div></footer>
+
+  <script>
+    (() => {
+      const menuButton = document.querySelector('.menu-toggle');
+      const navLinks = document.querySelector('.nav-links');
+      menuButton.addEventListener('click', () => {
+        const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
+        menuButton.setAttribute('aria-expanded', String(!isOpen));
+        menuButton.setAttribute('aria-label', isOpen ? 'Open navigation' : 'Close navigation');
+        navLinks.classList.toggle('open', !isOpen);
+      });
+      navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuButton.setAttribute('aria-label', 'Open navigation');
+      }));
+
+      const revealItems = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -35px 0px' });
+        revealItems.forEach(item => observer.observe(item));
+      } else {
+        revealItems.forEach(item => item.classList.add('is-visible'));
+      }
+
+      const sections = [...document.querySelectorAll('main section[id]')];
+      const links = [...document.querySelectorAll('.nav-links a')];
+      if ('IntersectionObserver' in window) {
+        const sectionObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              links.forEach(link => {
+                if (link.getAttribute('href') === `#${entry.target.id}`) link.setAttribute('aria-current', 'location');
+                else link.removeAttribute('aria-current');
+              });
+            }
+          });
+        }, { rootMargin: '-25% 0px -65% 0px' });
+        sections.forEach(section => sectionObserver.observe(section));
+      }
+    })();
+  </script>
 </body>
 </html>
