@@ -27,6 +27,7 @@
     button { font: inherit; }
     .skip-link { position: absolute; left: 12px; top: -60px; z-index: 2000; padding: 10px 14px; color: #06101d; background: var(--blue); border-radius: 8px; }
     .skip-link:focus { top: 12px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     .wrap { width: min(var(--max), calc(100% - 48px)); margin-inline: auto; }
     .mono { font-family: var(--mono); }
     .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--blue); font: 700 11px/1.4 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
@@ -208,7 +209,7 @@
       <ul class="nav-links" id="nav-links">
         <li><a href="#challenge">Challenge</a></li><li><a href="#solution">Solution</a></li><li><a href="#architecture">Architecture</a></li><li><a href="#rollout">Rollout</a></li><li><a href="#impact">Impact</a></li>
       </ul>
-      <div class="nav-cta"><a class="btn btn-quiet" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">View project <span aria-hidden="true">↗</span></a></div>
+      <div class="nav-cta"><a class="btn btn-quiet" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">View project <span aria-hidden="true">↗</span><span class="sr-only"> (opens in new tab)</span></a></div>
     </nav>
   </header>
 
@@ -221,7 +222,7 @@
           <h1 id="hero-title">45-minute IT ticket.<br><span>60-second fix.</span></h1>
           <p class="hero-lede">An enterprise-focused Windows Batch utility that simplifies recurring endpoint issues through safe, one-click self-service repairs. Built by Vikas Singh and designed with real-world corporate IT environments in mind, helping reduce repetitive manual troubleshooting while maintaining consistency across managed Windows systems—all without installing agents or relying on external dependencies.<br><br>Designed for managed corporate Windows environments.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">View GitHub repository <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-primary" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">View GitHub repository <span aria-hidden="true">↗</span><span class="sr-only"> (opens in new tab)</span></a>
             <a class="btn btn-quiet" href="#solution">Explore the build <span aria-hidden="true">↓</span></a>
           </div>
           <div class="proofline"><span><b>✓</b> Enterprise-focused design</span><span><b>✓</b> Managed Windows environments</span><span><b>✓</b> Native Windows utility</span></div>
@@ -331,9 +332,9 @@
         <div class="about reveal">
           <div class="about-person"><div class="avatar" aria-hidden="true">VS</div><div><h2>Vikas Singh</h2><div class="about-role">System Analyst · Endpoint Automation &amp; Infrastructure Operations</div><p>Specializing in enterprise endpoint automation, Windows OS customization, self-service support architecture, and operational efficiency. Initiated and engineered the Advanced IT Troubleshooting Utility with managed corporate Windows environments in mind.</p></div></div>
           <div class="about-actions">
-            <a class="btn btn-primary" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">View project on GitHub ↗</a>
-            <a class="btn btn-quiet" href="https://www.linkedin.com/in/vikas-singh" target="_blank" rel="noopener noreferrer">LinkedIn profile ↗</a>
-            <a class="btn btn-quiet" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">Project files / README ↗</a>
+            <a class="btn btn-primary" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">View project on GitHub <span aria-hidden="true">↗</span><span class="sr-only"> (opens in new tab)</span></a>
+            <a class="btn btn-quiet" href="https://www.linkedin.com/in/vikas-singh" target="_blank" rel="noopener noreferrer">LinkedIn profile <span aria-hidden="true">↗</span><span class="sr-only"> (opens in new tab)</span></a>
+            <a class="btn btn-quiet" href="https://github.com/vikas3333-singh/Advanced-IT-Troubleshooting-Utility" target="_blank" rel="noopener noreferrer">Project files / README <span aria-hidden="true">↗</span><span class="sr-only"> (opens in new tab)</span></a>
           </div>
         </div>
       </div>
@@ -345,17 +346,26 @@
     (() => {
       const menuButton = document.querySelector('.menu-toggle');
       const navLinks = document.querySelector('.nav-links');
+      const closeMenu = (restoreFocus = false) => {
+        if (menuButton.getAttribute('aria-expanded') !== 'true') return;
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuButton.setAttribute('aria-label', 'Open navigation');
+        navLinks.classList.remove('open');
+        if (restoreFocus) menuButton.focus();
+      };
       menuButton.addEventListener('click', () => {
         const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
         menuButton.setAttribute('aria-expanded', String(!isOpen));
         menuButton.setAttribute('aria-label', isOpen ? 'Open navigation' : 'Close navigation');
         navLinks.classList.toggle('open', !isOpen);
       });
-      navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
-        navLinks.classList.remove('open');
-        menuButton.setAttribute('aria-expanded', 'false');
-        menuButton.setAttribute('aria-label', 'Open navigation');
-      }));
+      navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeMenu()));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMenu(true);
+      });
+      document.addEventListener('click', (e) => {
+        if (!menuButton.contains(e.target) && !navLinks.contains(e.target)) closeMenu();
+      });
 
       const revealItems = document.querySelectorAll('.reveal');
       if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -372,8 +382,8 @@
         revealItems.forEach(item => item.classList.add('is-visible'));
       }
 
-      const sections = [...document.querySelectorAll('main section[id]')];
       const links = [...document.querySelectorAll('.nav-links a')];
+      const targets = links.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
       if ('IntersectionObserver' in window) {
         const sectionObserver = new IntersectionObserver(entries => {
           entries.forEach(entry => {
@@ -385,7 +395,7 @@
             }
           });
         }, { rootMargin: '-25% 0px -65% 0px' });
-        sections.forEach(section => sectionObserver.observe(section));
+        targets.forEach(target => sectionObserver.observe(target));
       }
     })();
   </script>
