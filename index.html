@@ -71,8 +71,14 @@ h1 em{font-style:italic;font-weight:400;display:block;color:var(--mute)}
 .pane{background:var(--night);color:#c9d6dd;border-radius:6px;padding:var(--s3);font:.84rem/1.8 var(--mono);min-height:19rem;align-self:start}
 .pane h3{font:600 1rem var(--sans);color:#fff;margin:0 0 .5rem}
 .pane p{font:.9rem/1.6 var(--sans);color:#aebdc6;max-width:none}
-.pane pre{margin:.4rem 0 0;padding:var(--s2);background:#0a0f13;border-radius:4px;white-space:pre-wrap;overflow-wrap:anywhere;color:#9fd3d8}
-.pane .cap{margin:var(--s2) 0 0;font-size:.8125rem;color:#8ea0ab}.pane .warn{color:#e8c36a;font:.82rem/1.5 var(--sans);margin:var(--s2) 0 0}
+.pane-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s1);margin:var(--s2) 0 .4rem}
+.pane .cap{margin:0;font-size:.8125rem;color:#8ea0ab}
+.copy-btn{background:transparent;border:1px solid #2e3d49;border-radius:4px;color:#c9d6dd;font:500 .75rem/1 var(--sans);padding:.35rem .65rem;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem;transition:all .2s;white-space:nowrap}
+.copy-btn:hover{background:#18222a;border-color:#5fb7c0;color:#fff}
+.copy-btn:focus-visible{outline:2px solid #5fb7c0;outline-offset:2px}
+.copy-btn.copied{border-color:#5fb7c0;color:#9fd3d8;background:#18222a}
+.pane pre{margin:0;padding:var(--s2);background:#0a0f13;border-radius:4px;white-space:pre-wrap;overflow-wrap:anywhere;color:#9fd3d8}
+.pane .warn{color:#e8c36a;font:.82rem/1.5 var(--sans);margin:var(--s2) 0 0}
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s2);list-style:none;padding:0;margin:var(--s4) 0 0;counter-reset:s}
 .steps li{counter-increment:s;border-top:2px solid var(--ink);padding-top:var(--s2);font-size:var(--t-sm);color:var(--mute)}
 .steps li::before{content:"Step " counter(s);display:block;font-weight:600;color:var(--teal);margin-bottom:.2rem}
@@ -180,9 +186,32 @@ const fixes=[
 ["Diagnostic system summary","Writes a text report with IP status, gateway reachability and uptime for escalations.","ipconfig /all\nsysteminfo\n(write report.txt)","[OK] report.txt saved"]];
 const tabs=document.getElementById('tabs'),pane=document.getElementById('pane');
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let copyTimer=null;
+function copyCmd(btn,text){
+  const doCopy=()=>navigator.clipboard?navigator.clipboard.writeText(text):new Promise((res,rej)=>{
+    const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy')?res():rej()}catch(e){rej(e)}finally{document.body.removeChild(ta)}
+  });
+  doCopy().then(()=>{
+    clearTimeout(copyTimer);
+    btn.classList.add('copied');
+    btn.innerHTML='<span aria-hidden="true">✓</span> Copied!';
+    btn.setAttribute('aria-label','Copied commands to clipboard');
+    copyTimer=setTimeout(()=>{
+      btn.classList.remove('copied');
+      btn.innerHTML='<span aria-hidden="true">📋</span> Copy';
+      btn.setAttribute('aria-label','Copy commands to clipboard');
+    },2000);
+  }).catch(()=>{
+    btn.textContent='Failed to copy';
+    setTimeout(()=>{btn.innerHTML='<span aria-hidden="true">📋</span> Copy';btn.setAttribute('aria-label','Copy commands to clipboard')},2000);
+  });
+}
 function show(i,focus){[...tabs.children].forEach((t,j)=>{t.setAttribute('aria-selected',j===i);t.tabIndex=j===i?0:-1});
 const f=fixes[i];pane.setAttribute('aria-labelledby','tab'+i);
-pane.innerHTML='<h3>'+esc(f[0])+'</h3><p>'+esc(f[1])+'</p><p class="cap">Standard Windows commands behind this repair:</p><pre>'+esc(f[2])+'</pre>'+(f[4]?'<p class="warn">'+esc(f[4])+'</p>':'');
+pane.innerHTML='<h3>'+esc(f[0])+'</h3><p>'+esc(f[1])+'</p><div class="pane-head"><p class="cap">Standard Windows commands behind this repair:</p><button type="button" class="copy-btn" aria-label="Copy commands to clipboard" aria-live="polite"><span aria-hidden="true">📋</span> Copy</button></div><pre>'+esc(f[2])+'</pre>'+(f[4]?'<p class="warn">'+esc(f[4])+'</p>':'');
+const cBtn=pane.querySelector('.copy-btn');
+if(cBtn)cBtn.addEventListener('click',()=>copyCmd(cBtn,f[2]));
 if(focus)tabs.children[i].focus()}
 fixes.forEach((f,i)=>{const b=document.createElement('button');b.type='button';b.id='tab'+i;b.setAttribute('role','tab');b.setAttribute('aria-controls','pane');b.innerHTML='<span>'+(i+1)+'</span>'+esc(f[0]);
 b.addEventListener('click',()=>{show(i);if(matchMedia('(max-width:60rem)').matches){const r=pane.getBoundingClientRect();if(r.top>innerHeight*.6||r.bottom<0)pane.scrollIntoView({block:'center'})}});
